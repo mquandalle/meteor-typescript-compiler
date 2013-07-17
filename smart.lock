@@ -1,0 +1,15 @@
+{
+  "meteor": {},
+  "dependencies": {
+    "basePackages": {
+      "typescript-compiler": {
+        "path": "."
+      }
+    },
+    "packages": {
+      "typescript-compiler": {
+        "path": "."
+      }
+    }
+  }
+}
