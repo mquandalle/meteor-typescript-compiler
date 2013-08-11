@@ -2,7 +2,7 @@
 
 ## Introduction
 
-TypeScript is a typed superset of JavaScript from Microsoft that compiles to plain JavaScript. It brings strong typing to JavaScript offering classes, modules and interfaces.
+TypeScript is a typed super set of JavaScript from Microsoft that compiles to plain JavaScript. It brings strong typing to JavaScript offering classes, modules and interfaces.
 
 TypeScript is supported on both the client and the server. Files ending with `.ts` are automatically compiled to JavaScript.
 
@@ -17,8 +17,9 @@ That's it, from now on any `*.ts` file will be dynamically compiled (client or s
 
 ## What's included?
 
-* Typescript compiler is the latest and greatest 0.9.0.1
-* There are no typescript library files included, please seek and bundle them in your project.
+* Typescript compiler is the latest and greatest **0.9.1**
+* There are no typescript library files included (ie. lib.d.ts), please seek and bundle them in your project.
+* Compilation uses ECMAScript5 generation on the server & ECMAScript3 on the client.
 
 ## Credits
 
