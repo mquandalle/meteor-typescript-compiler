@@ -7,7 +7,7 @@ Package.on_test(function(api) {
 				   'typescript_tests.js'], ['client', 'server']);
 });
 
-Npm.depends({"typescript.api": "0.6.1"});
+Npm.depends({"typescript.api": "0.7.0"});
 
 var typescript_handler = function(bundle, source_path, serve_path, where) {
 
