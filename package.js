@@ -1,77 +1,85 @@
 Package.describe({
-    summary: "Typescript-compiler support for Meteor"
+	summary: "Typescript-compiler support for Meteor"
 });
 
-Package.on_test(function (api) {
-    api.add_files(['typescript_tests.ts',
-        'typescript_tests.js'], ['client', 'server']);
+Package.on_test(function(api) {
+	api.add_files(['typescript_tests.ts',
+				   'typescript_tests.js'], ['client', 'server']);
 });
 
 Npm.depends({"typescript.api": "0.6.1"});
 
-var typescript_handler = function (bundle, source_path, serve_path, where) {
+var typescript_handler = function(bundle, source_path, serve_path, where) {
 
-    serve_path = serve_path + '.js';
+	serve_path = serve_path + '.js';
 
-    var Future = Npm.require('fibers/future');
-    var typescript = Npm.require('typescript.api');
+	var Future = Npm.require('fibers/future');
+	var typescript = Npm.require('typescript.api');
 
-    // show diagnostic errors.
-    function getDiagnostics(units) {
+	// show diagnostic errors.
+	function getDiagnostics(units) {
 
-        var err = "";
-        for (var n in units) {
+		var err = "";
+		for (var n in units) {
 
-            for (var m in units[n].diagnostics) {
+			for (var m in units[n].diagnostics) {
 
-                err = err + units[n].diagnostics[m].toString() + '\n\r';
-            }
-        }
-        return err;
-    }
+				err = err + units[n].diagnostics[m].toString() + '\n\r';
+			}
+		}
+		return err;
+	}
 
-    function compile(source_path) {
+	function compile(source_path) {
 
-        var future = new Future;
+		var future = new Future;
 
-        typescript.reset();
+		typescript.reset();
 
-        typescript.resolve([source_path], function (resolved) {
+		typescript.resolve([source_path], function(resolved) {
 
-            if (!typescript.check(resolved)) {
+			if (!typescript.check(resolved)) {
 
-                return future.return(bundle.error(getDiagnostics(resolved)));
-            }
-            else {
+				return future.return(bundle.error(getDiagnostics(resolved)));
+			}
+			else {
 
-                typescript.compile(resolved, function (compiled) {
+				typescript.compile(resolved, function(compiled) {
 
-                    if (!typescript.check(compiled))
-                        return future.return(bundle.error(getDiagnostics(compiled)));
+					if (!typescript.check(compiled))
+						return future.return(bundle.error(getDiagnostics(compiled)));
 
-                    else {
+					else {
 
-                        var contents = new Buffer(compiled[0].content);
+						for (var i = 0 ; i < compiled.length ; i++) {
 
-                        bundle.add_resource({
-                            type: "js",
-                            path: serve_path,
-                            data: contents,
-                            where: where
-                        });
+							// Some ts files (especially .d.ts files) may compile to an empty string
+							var content = compiled[i].content;
+							if (content && content.length > 0) {
 
-                        return future.return(true);
-                    }
-                });
-            }
-        });
+								var contents = new Buffer(content);
 
-        return future;
-    }
+								bundle.add_resource({
+									type: "js",
+									path: serve_path,
+									data: contents,
+									where: where
+								});
+							}
+						}
 
-    var result = compile(source_path).wait();
-    if (result !== true)
-        return result;
+						return future.return(true);
+					}
+				});
+			}
+		});
+
+		return future;
+	}
+
+	var result = compile(source_path).wait();
+	if (result !== true)
+		return result;
 };
 
 Package.register_extension("ts", typescript_handler);

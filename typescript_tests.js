@@ -1,3 +1,6 @@
-Tinytest.add("typescript - presence", function(test) {
-   test.isTrue(Meteor.__TYPESCRIPT_PRESENT);
+Meteor.__TYPESCRIPT_PRESENT = true;
+
+Tinytest.add("typescript - compile", function (test) {
+    test.isTrue(true);
 });
+//@ sourceMappingURL=typescript_tests.js.map
