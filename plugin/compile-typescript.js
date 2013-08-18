@@ -198,7 +198,7 @@ function compile(compileStep) {
 var handler = function(compileStep) {
 
 	var filename = compileStep.inputPath;
-	console.log(filename);
+//	console.log(filename);
 
 	if (!endsWith(filename, ".d.ts")) {
 		compile(compileStep).wait();
