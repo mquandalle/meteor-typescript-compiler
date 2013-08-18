@@ -1,5 +1,7 @@
-/.npm/
-/packages/
-
-
+/.npm
+/packages
 .build*
+*.log
+/.meteor
+
+
