@@ -18,8 +18,10 @@ That's it, from now on any `*.ts` file will be dynamically compiled (client or s
 ## What's included?
 
 * Typescript compiler is the latest and greatest **0.9.1**
+* Compiler is used for server & client assets
 * There are no typescript library files included (ie. lib.d.ts), please seek and bundle them in your project.
 * Compilation uses ECMAScript5 generation on the server & ECMAScript3 on the client.
+* full SourceMap support
 
 ## Credits
 

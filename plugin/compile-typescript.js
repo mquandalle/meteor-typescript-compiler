@@ -72,47 +72,6 @@ var stripExportedVars = function(source, exports) {
 	return lines.join('\n');
 };
 
-//var addSharedHeader = function(source, sourceMap) {
-//	var sourceMapJSON = JSON.parse(sourceMap);
-//
-//	// We want the symbol "share" to be visible to all CoffeeScript files in the
-//	// package (and shared between them), but not visible to JavaScript
-//	// files. (That's because we don't want to introduce two competing ways to
-//	// make package-local variables into JS ("share" vs assigning to non-var
-//	// variables).) The following hack accomplishes that: "__coffeescriptShare"
-//	// will be visible at the package level and "share" at the file level.  This
-//	// should work both in "package" mode where __coffeescriptShare will be added
-//	// as a var in the package closure, and in "app" mode where it will end up as
-//	// a global.
-//	//
-//	// This ends in a newline to make the source map easier to adjust.
-//	var header = ("__coffeescriptShare = typeof __coffeescriptShare === 'object' " +
-//		"? __coffeescriptShare : {}; " +
-//		"var share = __coffeescriptShare;\n");
-//
-//	// If the file begins with "use strict", we need to keep that as the first
-//	// statement.
-//	source = source.replace(/^(?:((['"])use strict\2;)\n)?/, function(match, useStrict) {
-//		if (match) {
-//			// There's a "use strict"; we keep this as the first statement and insert
-//			// our header at the end of the line that it's on. This doesn't change
-//			// line numbers or the part of the line that previous may have been
-//			// annotated, so we don't need to update the source map.
-//			return useStrict + "  " + header;
-//		} else {
-//			// There's no use strict, so we can just add the header at the very
-//			// beginning. This adds a line to the file, so we update the source map to
-//			// add a single un-annotated line to the beginning.
-//			sourceMapJSON.mappings = ";" + sourceMapJSON.mappings;
-//			return header;
-//		}
-//	});
-//	return {
-//		source: source,
-//		sourceMap: JSON.stringify(sourceMapJSON)
-//	};
-//};
-
 // show diagnostic errors.
 var getDiagnostics = function(units) {
 
@@ -143,17 +102,18 @@ function compile(compileStep) {
 
 	typescript.reset({
 		languageVersion: jsVersion,
-		removeComments: true
+		removeComments: true,
+		mapSourceFiles: true
 	});
 
-	typescript.resolve([compileStep._fullInputPath], function(resolved) {
+	typescript.resolve([compileStep._fullInputPath], function(resolvedArray) {
 
-		if (!typescript.check(resolved))
-			throw new Error(getDiagnostics(resolved));
+		if (!typescript.check(resolvedArray))
+			throw new Error(getDiagnostics(resolvedArray));
 
 		else {
 
-			typescript.compile(resolved, function(compiledUnit) {
+			typescript.compile(resolvedArray, function(compiledUnit) {
 
 				if (!typescript.check(compiledUnit))
 					throw new Error(getDiagnostics(compiledUnit));
@@ -162,26 +122,19 @@ function compile(compileStep) {
 
 					for (var i = 0 ; i < compiledUnit.length ; i++) {
 
-						var sourcejs = compiledUnit[i].content;
+						var sourceJS = compiledUnit[i].content;
 
 						// Some ts files (especially .d.ts files) may compile to an empty string
-						if (sourcejs && sourcejs.length > 0) {
+						if (sourceJS && sourceJS.length > 0) {
 
-							//console.log("content:" + JSON.stringify(compiledUnit[i].content));
-
-							var stripped = stripExportedVars(sourcejs, compileStep.declaredExports);
-
-							//console.log("sourcemap:" + JSON.stringify(compiledUnit[i].sourcemap));
-							//		var sourceWithMap = addSharedHeader(stripped, compiledUnit[i].sourcemap);
+							var strippedJS = stripExportedVars(sourceJS, compileStep.declaredExports);
 
 							var filename = compileStep.inputPath;
-
 							compileStep.addJavaScript({
 								path: filename + ".js",
 								sourcePath: filename,
-								data: stripped
-//								data: sourceWithMap.source,
-//								sourceMap: sourceWithMap.sourceMap
+								data: strippedJS,
+								sourceMap: compiledUnit[i].sourcemap
 							});
 						}
 					}
@@ -198,7 +151,6 @@ function compile(compileStep) {
 var handler = function(compileStep) {
 
 	var filename = compileStep.inputPath;
-//	console.log(filename);
 
 	if (!endsWith(filename, ".d.ts")) {
 		compile(compileStep).wait();

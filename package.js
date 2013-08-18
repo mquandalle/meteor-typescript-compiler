@@ -1,6 +1,6 @@
 
 Package.describe({
-	summary: "Typescript-compiler support for Meteor"
+	summary: "Full Typescript support for Meteor: client/server/sourcemaps"
 });
 
 Package._transitional_registerBuildPlugin({
@@ -9,7 +9,7 @@ Package._transitional_registerBuildPlugin({
 	sources: [
 		'plugin/compile-typescript.js'
 	],
-	npmDependencies: {"typescript.api": "0.7.0", "source-map": "0.1.24"}
+	npmDependencies: {"typescript.api": "0.7.1"}
 });
 
 //Package.on_test(function (api) {
