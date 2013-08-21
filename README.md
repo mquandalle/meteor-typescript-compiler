@@ -13,15 +13,15 @@ See [http://www.typescriptlang.org](http://www.typescriptlang.org) for more info
 * Make sure you have meteorite installed: `npm install -g meteorite`
 * From your Meteor project, type `mrt install typescript-compiler`
 
-That's it, from now on any `*.ts` file will be dynamically compiled (client or server).
+That's it! From now on, any `*.ts` file is dynamically compiled to javascript (client and server).
 
 ## What's included?
 
-* Typescript compiler is the latest and greatest **0.9.1**
-* Compiler is used for server & client assets
-* There are no typescript library files included (ie. lib.d.ts), please seek and bundle them in your project.
+* Typescript compiler is the latest and greatest **0.9.1.1**.
+* Compiler is used for server & client assets.
+* Libraries are not included with the project (ie. lib.d.ts), please bundle them in your project.
 * Compilation uses ECMAScript5 generation on the server & ECMAScript3 on the client.
-* full SourceMap support
+* Full SourceMap support.
 
 ## Credits
 
