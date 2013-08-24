@@ -102,8 +102,9 @@ function compile(compileStep) {
 
 	typescript.reset({
 		languageVersion: jsVersion,
-		removeComments: true,
-		mapSourceFiles: true
+		removeComments: true
+		// disabeling source maps for now
+		//,mapSourceFiles: true
 	});
 
 	typescript.resolve([compileStep._fullInputPath], function(resolvedArray) {
@@ -120,27 +121,27 @@ function compile(compileStep) {
 
 				else {
 
-					for (var i = 0 ; i < compiledUnit.length ; i++) {
-
-						var sourceJS = compiledUnit[i].content;
+				//	for (var i = 0 ; i < compiledUnit.length ; i++) {
+					//	console.log(i);
+						var sourceJS = compiledUnit[0].content;
 
 						// Some ts files (especially .d.ts files) may compile to an empty string
 						if (sourceJS && sourceJS.length > 0) {
 
 							var strippedJS = stripExportedVars(sourceJS, compileStep.declaredExports);
-
 							var filename = compileStep.inputPath;
+
 							compileStep.addJavaScript({
 								path: filename + ".js",
 								sourcePath: filename,
 								data: strippedJS,
-								sourceMap: compiledUnit[i].sourcemap
+								sourceMap: compiledUnit[0].sourcemap
 							});
 						}
 					}
 
 					return future.return(true);
-				}
+			//	}
 			});
 		}
 	});

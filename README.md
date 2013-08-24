@@ -29,3 +29,9 @@ This project would have never been possible without this project [https://github
 
 Authored by Olivier Refalo
 
+## Tips
+
+* Never reference a **file.ts**, rather generate a **file.d.ts** and reference this one.
+* Prefer Template['todo']['hello'] to Temaplte.todo.hello
+* Use Handlers properly
+
