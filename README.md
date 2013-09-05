@@ -21,7 +21,7 @@ That's it! From now on, any `*.ts` file is dynamically compiled to javascript (c
 * Compiler is used for server & client assets.
 * Libraries are not included with the project (ie. lib.d.ts), please bundle them in your project.
 * Compilation uses ECMAScript5 generation on the server & ECMAScript3 on the client.
-* Full SourceMap support.
+* Full SourceMap support. (Well removed in this release b/c of issues, should come back soon)
 
 ## Credits
 
@@ -31,7 +31,8 @@ Authored by Olivier Refalo
 
 ## Tips
 
+* You will probably like **meteor.d.ts** at [https://github.com/orefalo/meteorts-libs](https://github.com/orefalo/meteorts-libs)
 * Never reference a **file.ts**, rather generate a **file.d.ts** and reference this one.
-* Prefer Template['todo']['hello'] to Temaplte.todo.hello
-* Use Handlers properly
+* Prefer Template['todo']['hello'] to Template.todo.hello
+* (<HTMLInputElement>evt.target).value
 
