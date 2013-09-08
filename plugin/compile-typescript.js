@@ -103,8 +103,7 @@ function compile(compileStep) {
 	typescript.reset({
 		languageVersion: jsVersion,
 		removeComments: true,
-		mapSourceFiles: true,
-		outputMany: false
+		mapSourceFiles: true
 	});
 
 	typescript.resolve([compileStep._fullInputPath], function(resolvedArray) {
