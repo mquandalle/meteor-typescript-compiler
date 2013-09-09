@@ -102,9 +102,8 @@ function compile(compileStep) {
 
 	typescript.reset({
 		languageVersion: jsVersion,
-		removeComments: true
-		// disabeling source maps for now
-		//,mapSourceFiles: true
+		removeComments: true,
+		mapSourceFiles: true
 	});
 
 	typescript.resolve([compileStep._fullInputPath], function(resolvedArray) {
@@ -121,27 +120,36 @@ function compile(compileStep) {
 
 				else {
 
-				//	for (var i = 0 ; i < compiledUnit.length ; i++) {
-					//	console.log(i);
-						var sourceJS = compiledUnit[0].content;
+					var sourceJS = compiledUnit[0].content;
 
-						// Some ts files (especially .d.ts files) may compile to an empty string
-						if (sourceJS && sourceJS.length > 0) {
+					// Some ts files (especially .d.ts files) may compile to an empty string
+					if (sourceJS && sourceJS.length > 0) {
 
-							var strippedJS = stripExportedVars(sourceJS, compileStep.declaredExports);
-							var filename = compileStep.inputPath;
+						// Strip generated sourceMappingURL line (meteor will add its own).
+						// Doing this probably affects the actual source mapping, but this line is near
+						// the end so hopefully it won't matter much.
+						sourceJS = sourceJS.replace(/\/\/# sourceMappingURL[^\n]*/, '');
 
-							compileStep.addJavaScript({
-								path: filename + ".js",
-								sourcePath: filename,
-								data: strippedJS,
-								sourceMap: compiledUnit[0].sourcemap
-							});
-						}
+						// This can also affect the actual source mapping, but I believe these should
+						// only be changes within a line, so high-level line-to-line mapping should
+						// still be consistent.
+						var strippedJS = stripExportedVars(sourceJS, compileStep.declaredExports);
+						var filename = compileStep.inputPath;
+
+						var sourceMap = JSON.parse(compiledUnit[0].sourcemap);
+						var source = compileStep.read().toString('utf8');
+						sourceMap.sourcesContent = [source];
+
+						compileStep.addJavaScript({
+							path: filename + ".js",
+							sourcePath: filename,
+							data: strippedJS,
+							sourceMap: JSON.stringify(sourceMap)
+						});
 					}
 
 					return future.return(true);
-			//	}
+				}
 			});
 		}
 	});
