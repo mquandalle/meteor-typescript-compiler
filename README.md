@@ -13,7 +13,7 @@ See [http://www.typescriptlang.org](http://www.typescriptlang.org) for more info
 * Make sure you have meteorite installed: `npm install -g meteorite`
 * From your Meteor project, type `mrt install typescript-compiler`
 
-That's it! From now on, any `*.ts` file is dynamically compiled to javascript (client and server).
+That's it! From now on, all `*.ts` files are dynamically compiled into Javascript (client and server).
 
 ## What's included?
 
@@ -21,21 +21,20 @@ That's it! From now on, any `*.ts` file is dynamically compiled to javascript (c
 * Compiler is used for server & client assets.
 * Libraries are not included with the project (ie. lib.d.ts), please bundle them in your project.
 * Compilation uses ECMAScript5 generation on the server & ECMAScript3 on the client.
-* Full SourceMap support. (Well removed in this release b/c of issues, should come back soon)
+* Full SourceMap support.
 
 ## Credits
 
-This project would have never been possible without this project [https://github.com/sinclairzx81/typescript.api](https://github.com/sinclairzx81/typescript.api). All credits go to the author **sinclairzx81** for his clean and easy to use API.
-
-Authored by Olivier Refalo
-
-Many thanks to [Jason Parekh](https://github.com/jasonparekh) for fixing SourceMaps.
+* This project would have never been possible without this project [https://github.com/sinclairzx81/typescript.api](https://github.com/sinclairzx81/typescript.api). All credits go to the author **sinclairzx81** for his clean and easy to use API.
+* Many thanks to [Jason Parekh](https://github.com/jasonparekh) for fixing SourceMaps.
+* Authored by [Olivier Refalo](https://github.com/orefalo).
 
 
 ## Tips
 
-* You will probably like **meteor.d.ts** at [https://github.com/orefalo/meteorts-libs](https://github.com/orefalo/meteorts-libs)
-* Never reference a **file.ts**, rather generate a **file.d.ts** and reference this one.
-* Prefer Template['todo']['hello'] to Template.todo.hello
-* Trying to read a form field value? use(<HTMLInputElement>evt.target).value
+* You will probably like **meteor.d.ts** at [https://github.com/orefalo/meteorts-libs](https://github.com/orefalo/meteorts-libs), contributions are welcome.
+* Never reference a **file.ts**, rather generate a **file.d.ts** using `tsc --reference file.ts`.
+* Accessing templates can be a little tricky in TS, prefer `Template['todo']['hello']` to `Template.todo.hello`.
+* Trying to read a form field value? use `(<HTMLInputElement>evt.target).value`.
+* [WebStorm 7](http://www.jetbrains.com/webstorm/) is an excellent IDE for TypeScript and Node web applications in general.
 
