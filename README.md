@@ -29,10 +29,13 @@ This project would have never been possible without this project [https://github
 
 Authored by Olivier Refalo
 
+Many thanks to [Jason Parekh](https://github.com/jasonparekh) for fixing SourceMaps.
+
+
 ## Tips
 
 * You will probably like **meteor.d.ts** at [https://github.com/orefalo/meteorts-libs](https://github.com/orefalo/meteorts-libs)
 * Never reference a **file.ts**, rather generate a **file.d.ts** and reference this one.
 * Prefer Template['todo']['hello'] to Template.todo.hello
-* (<HTMLInputElement>evt.target).value
+* Trying to read a form field value? use(<HTMLInputElement>evt.target).value
 
