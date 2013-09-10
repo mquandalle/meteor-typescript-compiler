@@ -5,6 +5,6 @@ mrproper:
 	rm -rf ~/.meteor ~/.meteorite/ ./packages/
 
 deploy:
-	mrt deploy .
+	mrt release .
 
 
