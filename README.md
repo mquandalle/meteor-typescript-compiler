@@ -21,7 +21,7 @@ That's it! From now on, all `*.ts` files are dynamically compiled into Javascrip
 * Compiler is used for server & client assets.
 * Libraries are not included with the project (ie. lib.d.ts), please bundle them in your project.
 * Compilation uses ECMAScript5 generation on the server & ECMAScript3 on the client.
-* Full SourceMap support.
+* Full SourceMap support. **Featured disabled for now, issue with the TS compiler**
 
 ## Credits
 

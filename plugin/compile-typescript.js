@@ -103,7 +103,8 @@ function compile(compileStep) {
 	typescript.reset({
 		languageVersion: jsVersion,
 		removeComments: true,
-		mapSourceFiles: true
+        mapSourceFiles: false
+        //mapSourceFiles: true
 	});
 
 	typescript.resolve([compileStep._fullInputPath], function(resolvedArray) {
@@ -136,15 +137,16 @@ function compile(compileStep) {
 						var strippedJS = stripExportedVars(sourceJS, compileStep.declaredExports);
 						var filename = compileStep.inputPath;
 
-						var sourceMap = JSON.parse(compiledUnit[0].sourcemap);
+						//var sourceMap = JSON.parse(compiledUnit[0].sourcemap);
 						var source = compileStep.read().toString('utf8');
-						sourceMap.sourcesContent = [source];
+						//sourceMap.sourcesContent = [source];
 
 						compileStep.addJavaScript({
 							path: filename + ".js",
 							sourcePath: filename,
-							data: strippedJS,
-							sourceMap: JSON.stringify(sourceMap)
+							data: strippedJS
+                            //,
+							//sourceMap: JSON.stringify(sourceMap)
 						});
 					}
 
