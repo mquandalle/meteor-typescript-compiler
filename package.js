@@ -1,6 +1,6 @@
 
 Package.describe({
-	summary: "Full Typescript support for Meteor: client/server/sourcemaps"
+	summary: "Full Typescript (.ts) support for Meteor"
 });
 
 Package._transitional_registerBuildPlugin({
@@ -11,16 +11,3 @@ Package._transitional_registerBuildPlugin({
 	],
 	npmDependencies: {"typescript.api": "0.7.6"}
 });
-
-//Package.on_test(function (api) {
-//	api.use(['typescript-compiler', 'tinytest']);
-//	api.use(['coffeescript-test-helper'], ['client', 'server']);
-//	api.add_files([
-//		'coffeescript_test_setup.js',
-//		'coffeescript_tests.coffee',
-//		'coffeescript_strict_tests.coffee',
-//		'litcoffeescript_tests.litcoffee',
-//		'coffeescript_tests.js'
-//	], ['client', 'server']);
-//});
-
