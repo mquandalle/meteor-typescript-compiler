@@ -9,5 +9,5 @@ Package._transitional_registerBuildPlugin({
 	sources: [
 		'plugin/compile-typescript.js'
 	],
-	npmDependencies: {"typescript.api": "0.7.6"}
+	npmDependencies: {"typescript.api": "0.7.7"}
 });
