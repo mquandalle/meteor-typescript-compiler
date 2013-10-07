@@ -72,7 +72,7 @@ var stripExportedVars = function(source, exports) {
 	return lines.join('\n');
 };
 
-// show diagnostic errors.
+// Returns diagnostic errors.
 var getDiagnostics = function(units) {
 
 	var err = "";
@@ -86,6 +86,8 @@ var getDiagnostics = function(units) {
 	return err;
 };
 
+
+// Used to check the filename extension
 var endsWith = function(str, ends) {
 	if (str == null) return false;
 	return str.length >= ends.length && str.slice(str.length - ends.length) === ends;
@@ -104,20 +106,22 @@ function compile(compileStep) {
 		languageVersion: jsVersion,
 		removeComments: true,
         mapSourceFiles: false
+        // SourceMaps are turned off until the following issue is resolved
+        // https://typescript.codeplex.com/workitem/1286
         //mapSourceFiles: true
 	});
 
 	typescript.resolve([compileStep._fullInputPath], function(resolvedArray) {
 
 		if (!typescript.check(resolvedArray))
-			throw new Error(getDiagnostics(resolvedArray));
+            return future.return(getDiagnostics(resolvedArray));
 
 		else {
 
 			typescript.compile(resolvedArray, function(compiledUnit) {
 
 				if (!typescript.check(compiledUnit))
-					throw new Error(getDiagnostics(compiledUnit));
+                    return future.return(getDiagnostics(compiledUnit));
 
 				else {
 
@@ -164,7 +168,11 @@ var handler = function(compileStep) {
 	var filename = compileStep.inputPath;
 
 	if (!endsWith(filename, ".d.ts")) {
-		compile(compileStep).wait();
+		var result=compile(compileStep).wait();
+        if(result!==true) {
+            throw new Error(result);
+        }
+
 	}
 };
 
