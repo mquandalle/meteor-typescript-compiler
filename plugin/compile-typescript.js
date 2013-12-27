@@ -125,7 +125,13 @@ function compile(compileStep) {
 
 				else {
 
-					var sourceJS = compiledUnit[0].content;
+					// Get compiled JS code of file 'compileStep._fullInputPath', and ignore
+                    //   other compilation units pulled-in by "<reference path=.../>".
+                    var sourceJS = _.find(compiledUnit, function(unit) {
+                        if (unit.script.name === compileStep._fullInputPath) {
+                            return true;
+                        }
+                    }).content;
 
 					// Some ts files (especially .d.ts files) may compile to an empty string
 					if (sourceJS && sourceJS.length > 0) {
