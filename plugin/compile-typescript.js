@@ -2,7 +2,7 @@ var fs = Npm.require('fs');
 var path = Npm.require('path');
 var _ = Npm.require('underscore');
 var Future = Npm.require('fibers/future');
-var typescript = Npm.require('typescript.api');
+var ts = Npm.require('ts-compiler');
 
 var stripExportedVars = function(source, exports) {
 	if (!exports || _.isEmpty(exports))
@@ -72,21 +72,6 @@ var stripExportedVars = function(source, exports) {
 	return lines.join('\n');
 };
 
-// Returns diagnostic errors.
-var getDiagnostics = function(units) {
-
-	var err = "";
-	for (var n in units) {
-
-		for (var m in units[n].diagnostics) {
-
-			err = err + units[n].diagnostics[m].toString() + '\n\r';
-		}
-	}
-	return err;
-};
-
-
 // Used to check the filename extension
 var endsWith = function(str, ends) {
 	if (str == null) return false;
@@ -97,76 +82,52 @@ function compile(compileStep) {
 
 	var future = new Future;
 
-	var jsVersion = "EcmaScript5";
-	if (compileStep.archMatches("browser")) {
-		jsVersion = "EcmaScript3";
-	}
+	var jsVersion = "ES5";
+	if (compileStep.archMatches("browser"))
+		jsVersion = "ES3";
 
-	typescript.reset({
-		languageVersion: jsVersion,
-		removeComments: true,
-        mapSourceFiles: false
-        // SourceMaps are turned off until the following issue is resolved
-        // https://typescript.codeplex.com/workitem/1286
-        //mapSourceFiles: true
-	});
+	var filename = compileStep.inputPath;
+	console.log("Compiling "+jsVersion+' '+compileStep._fullInputPath);
 
-	typescript.resolve([compileStep._fullInputPath], function(resolvedArray) {
+	ts.compile(
+		[compileStep._fullInputPath],
 
-		if (!typescript.check(resolvedArray))
-            return future.return(getDiagnostics(resolvedArray));
+		{ 'skipWrite': true, 'target': jsVersion, 'removeComments': true },
+		function(err, results) {
 
-		else {
+			if(err) {
+				console.log('\x1b[36m%s\x1b[0m', err);
+			//	console.log("ERROR:" + err);
+				return;
+				//future.return(err);
+			}
+			else {
+				if (results) {
 
-			typescript.compile(resolvedArray, function(compiledUnit) {
-
-				if (!typescript.check(compiledUnit))
-                    return future.return(getDiagnostics(compiledUnit));
-
-				else {
-
-					// Get compiled JS code of file 'compileStep._fullInputPath', and ignore
-                    //   other compilation units pulled-in by "<reference path=.../>".
-                    var sourceJS = _.find(compiledUnit, function(unit) {
-                        if (unit.script.name === compileStep._fullInputPath) {
-                            return true;
-                        }
-                    }).content;
-
+					var generatedItem = results[0];
+					var src;
 					// Some ts files (especially .d.ts files) may compile to an empty string
-					if (sourceJS && sourceJS.length > 0) {
+					if (generatedItem)
+						src = generatedItem.text;
 
-						// Strip generated sourceMappingURL line (meteor will add its own).
-						// Doing this probably affects the actual source mapping, but this line is near
-						// the end so hopefully it won't matter much.
-						sourceJS = sourceJS.replace(/\/\/# sourceMappingURL[^\n]*/, '');
-
-						// This can also affect the actual source mapping, but I believe these should
-						// only be changes within a line, so high-level line-to-line mapping should
-						// still be consistent.
-						var strippedJS = stripExportedVars(sourceJS, compileStep.declaredExports);
-						var filename = compileStep.inputPath;
-
-						//var sourceMap = JSON.parse(compiledUnit[0].sourcemap);
-						var source = compileStep.read().toString('utf8');
-						//sourceMap.sourcesContent = [source];
-
+					if (src.length > 0) {
+						//console.log(src);
 						compileStep.addJavaScript({
 							path: filename + ".js",
 							sourcePath: filename,
-							data: strippedJS
-                            //,
-							//sourceMap: JSON.stringify(sourceMap)
+							data: src
 						});
 					}
 
 					return future.return(true);
 				}
-			});
+				else return future.return(false);
+			}
 		}
-	});
+	);
 
 	return future;
+
 }
 
 var handler = function(compileStep) {
@@ -174,11 +135,9 @@ var handler = function(compileStep) {
 	var filename = compileStep.inputPath;
 
 	if (!endsWith(filename, ".d.ts")) {
-		var result=compile(compileStep).wait();
-        if(result!==true) {
-            throw new Error(result);
-        }
-
+		var result = compile(compileStep).wait();
+		if (result !== true)
+			throw new Error(result);
 	}
 };
 

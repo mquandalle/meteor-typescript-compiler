@@ -42,3 +42,7 @@ That's it! From now on, all `*.ts` files are dynamically compiled into Javascrip
 * Trying to read a form field value? use `(<HTMLInputElement>evt.target).value`.
 * [WebStorm 7](http://www.jetbrains.com/webstorm/) is an excellent IDE for TypeScript and Node web applications in general.
 
+## Updates
+
+May 6 2014 - switched internal compiler to ts-compiler, full support for ts 1.0
+

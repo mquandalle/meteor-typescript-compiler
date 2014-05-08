@@ -1,0 +1,6 @@
+{
+  "packages": {
+    "typescript-compiler": { "path": "../.."},
+    "typescript-libs": {}
+  }
+}
