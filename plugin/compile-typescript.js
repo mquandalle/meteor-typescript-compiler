@@ -89,7 +89,7 @@ function compile(compileStep) {
 	var filename = compileStep.inputPath;
 	console.log("Compiling "+jsVersion+' '+compileStep._fullInputPath);
 
-	ts.compile(
+	var bc=ts.compile(
 		[compileStep._fullInputPath],
 
 		{ 'skipWrite': true, 'target': jsVersion, 'removeComments': true },
@@ -97,28 +97,26 @@ function compile(compileStep) {
 
 			if(err) {
 				console.log('\x1b[36m%s\x1b[0m', err);
-			//	console.log("ERROR:" + err);
 				return;
-				//future.return(err);
 			}
 			else {
 				if (results) {
 
 					var generatedItem = results[0];
-					var src;
+
 					// Some ts files (especially .d.ts files) may compile to an empty string
-					if (generatedItem)
-						src = generatedItem.text;
+					if (generatedItem) {
+						var src = generatedItem.text;
 
-					if (src.length > 0) {
-						//console.log(src);
-						compileStep.addJavaScript({
-							path: filename + ".js",
-							sourcePath: filename,
-							data: src
-						});
+						if (src.length > 0) {
+							//console.log(src);
+							compileStep.addJavaScript({
+								path: filename + ".js",
+								sourcePath: filename,
+								data: src
+							});
+						}
 					}
-
 					return future.return(true);
 				}
 				else return future.return(false);

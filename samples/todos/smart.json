@@ -1,6 +1,6 @@
 {
   "packages": {
     "typescript-compiler": { "path": "../.."},
-    "typescript-libs": {}
+    "typescript-libs": { "path": "../../../meteor-typescript-libs"}
   }
 }

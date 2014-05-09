@@ -5,16 +5,16 @@
       "typescript-compiler": {
         "path": "../.."
       },
-      "typescript-libs": {}
+      "typescript-libs": {
+        "path": "../../../meteor-typescript-libs"
+      }
     },
     "packages": {
       "typescript-compiler": {
         "path": "../.."
       },
       "typescript-libs": {
-        "git": "https://github.com/orefalo/meteor-typescript-libs.git",
-        "tag": "v0.1.16",
-        "commit": "9838eec81baf55ddf038d85c5ccc3172730ef0b0"
+        "path": "../../../meteor-typescript-libs"
       }
     }
   }
