@@ -2,7 +2,7 @@ var fs = Npm.require('fs');
 var path = Npm.require('path');
 var _ = Npm.require('underscore');
 var Future = Npm.require('fibers/future');
-var ts = Npm.require('ts-compiler');
+
 
 var stripExportedVars = function(source, exports) {
 	if (!exports || _.isEmpty(exports))
@@ -89,6 +89,7 @@ function compile(compileStep) {
 	var filename = compileStep.inputPath;
 	console.log("Compiling "+jsVersion+' '+compileStep._fullInputPath);
 
+	var ts = Npm.require('ts-compiler');
 	var bc=ts.compile(
 		[compileStep._fullInputPath],
 
@@ -97,7 +98,7 @@ function compile(compileStep) {
 
 			if(err) {
 				console.log('\x1b[36m%s\x1b[0m', err);
-				return;
+				return err;
 			}
 			else {
 				if (results) {
@@ -133,9 +134,7 @@ var handler = function(compileStep) {
 	var filename = compileStep.inputPath;
 
 	if (!endsWith(filename, ".d.ts")) {
-		var result = compile(compileStep).wait();
-		if (result !== true)
-			throw new Error(result);
+		compile(compileStep).wait();
 	}
 };
 
