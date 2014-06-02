@@ -9,5 +9,6 @@ Package._transitional_registerBuildPlugin({
 	sources: [
 		'plugin/compile-typescript.js'
 	],
-	npmDependencies: {"ts-compiler": "2.0.0"}
+	npmDependencies: {"ts-compiler": "2.0.0",
+                    "node-persist" : "0.0.2"}
 });
