@@ -9,16 +9,10 @@ Storage.initSync({
 });
 
 // Keep track of mod times for files that have been parsed
-var Mtimes = Storage.getItem('mtimes'); // in-memory cache
-if (typeof Mtimes !== 'object') {
-//  console.log('NO MTIMES');
-  Mtimes = {};
-  Storage.setItem('mtimes', Mtimes);
-}
+var Mtimes = {};
 
 // Keep track of files in a cache
-if (typeof Storage.getItem('cache') !== 'object')
-  Storage.setItem('cache', {});
+Storage.setItem('cache', {});
 
 // Used to check the filename extension
 var endsWith = function(str, ends) {
@@ -52,14 +46,12 @@ function compileCheck(compileStep) {
 //        if (!!Mtimes[key])
 //          Options.useCache = false;
 //        Mtimes[key] = stats.mtime;
-//        Storage.setItem('mtimes', Mtimes);
 //      }
       future.return(true);
       
     } else if (wasModified(key, stats)) {
       
       Mtimes[key] = stats.mtime;
-      Storage.setItem('mtimes', Mtimes);
       compile(compileStep, future); 
       
     } else {
