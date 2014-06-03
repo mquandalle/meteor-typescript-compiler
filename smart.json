@@ -4,7 +4,7 @@
   "description": "Full Typescript (.ts) support for Meteor",
   "homepage": "https://github.com/orefalo/meteor-typescript-compiler",
   "author": "orefalo <orefalo@yahoo.com>",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "git": "https://github.com/orefalo/meteor-typescript-compiler.git",
   "packages": {}
 
