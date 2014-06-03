@@ -33,6 +33,7 @@ That's it! From now on, all `*.ts` files are dynamically compiled into Javascrip
 * This project would have never been possible without this project [https://github.com/sinclairzx81/typescript.api](https://github.com/sinclairzx81/typescript.api). All credits go to the author **sinclairzx81** for his clean and easy to use API.
 * Many thanks to [Jason Parekh](https://github.com/jasonparekh) for fixing SourceMaps.
 * Authored by [Olivier Refalo](https://github.com/orefalo).
+* Optimizations by [Alex Atallah](https://github.com/alexanderatallah).
 * Code based from the Meteor coffeescript package
 
 ## Tips
