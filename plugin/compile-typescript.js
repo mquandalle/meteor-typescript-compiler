@@ -47,13 +47,13 @@ function compileCheck(compileStep) {
 //      console.log("stored is undef");
     
     if (isDefinitionFile) {
-      
-      if (wasModified(key, stats)) {
-        if (!!Mtimes[key])
-          Options.useCache = false;
-        Mtimes[key] = stats.mtime;
-        Storage.setItem('mtimes', Mtimes);
-      }
+      // TODO: don't use cache when a .d.ts file changes
+//      if (wasModified(key, stats)) {
+//        if (!!Mtimes[key])
+//          Options.useCache = false;
+//        Mtimes[key] = stats.mtime;
+//        Storage.setItem('mtimes', Mtimes);
+//      }
       future.return(true);
       
     } else if (wasModified(key, stats)) {
