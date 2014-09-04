@@ -10,8 +10,7 @@ See [http://www.typescriptlang.org](http://www.typescriptlang.org) for more info
 
 ## Install
 
-* Make sure you have meteorite installed: `npm install -g meteorite`
-* From your Meteor project, type `mrt add typescript-compiler`
+* From your Meteor project, type `meteor add orefalo:typescript-compiler`
 
 That's it! From now on, all `*.ts` files are dynamically compiled into Javascript (client and server).
 
