@@ -114,16 +114,17 @@ function compile(compileStep, future) {
               compileStep.addJavaScript({
                 path: filename + ".js",
                 sourcePath: filename,
-                data: src
+                data: src,
+				bare: compileStep.fileOptions.bare
               });
             }
           }
           return future.return(true);
-          
+
         } else {
-          
+
           return future.return(false);
-          
+
         }
       }
     }

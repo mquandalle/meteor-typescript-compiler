@@ -1,6 +1,7 @@
 
 Package.describe({
-  summary: "Full Typescript (.ts) support for Meteor",
+  name: "meteortypescript:compiler",
+  summary: "TypeScript is a typed superset of JavaScript",
   version: "0.0.2",
   git: "git@github.com:meteor-typescript/meteor-typescript-compiler.git"
 });
