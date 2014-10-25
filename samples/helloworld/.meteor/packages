@@ -6,5 +6,5 @@
 autopublish
 insecure
 standard-app-packages
-typescript-compiler
-typescript-libs
+meteortypescript:compiler
+
