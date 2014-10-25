@@ -10,17 +10,16 @@ See [http://www.typescriptlang.org](http://www.typescriptlang.org) for more info
 
 ## Install
 
-* From your Meteor project, type `meteor add orefalo:typescript-compiler`
+* From your Meteor project, type `meteor add meteortypescript:compiler`
 
 That's it! From now on, all `*.ts` files are dynamically compiled into Javascript (client and server).
 
 ## What's included?
 
-* Typescript compiler is the latest and greatest **0.9.1.1**.
-* Compiler is used for server & client assets.
+* Typescript compiler is the latest and greatest **1.x**
+* Compiler is used for server & client assets
+* Compilation uses ECMAScript5 generation on the server & ECMAScript3 on the client
 * Libraries are not included with the project (ie. lib.d.ts), please bundle them in your project.
-* Compilation uses ECMAScript5 generation on the server & ECMAScript3 on the client.
-* Full SourceMap support. **Featured disabled for now, issue with the TS compiler**
 
 ## Other projects
 
@@ -29,8 +28,7 @@ That's it! From now on, all `*.ts` files are dynamically compiled into Javascrip
 
 ## Credits
 
-* This project would have never been possible without this project [https://github.com/sinclairzx81/typescript.api](https://github.com/sinclairzx81/typescript.api). All credits go to the author **sinclairzx81** for his clean and easy to use API.
-* Many thanks to [Jason Parekh](https://github.com/jasonparekh) for fixing SourceMaps.
+* This project would have never been possible without this project [https://github.com/jedmao/ts-compiler](https://github.com/jedmao/ts-compiler). All credits go to the author **sinclairzx81** for his clean and easy to use API.
 * Authored by [Olivier Refalo](https://github.com/orefalo).
 * Optimizations by [Alex Atallah](https://github.com/alexanderatallah).
 * Code based from the Meteor coffeescript package

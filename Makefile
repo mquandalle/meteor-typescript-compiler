@@ -4,6 +4,7 @@ all:
 mrproper:
 	echo rm -rf ~/.meteor ~/.meteorite/ ./packages/
 
+publish:
 deploy:
 	meteor publish
 

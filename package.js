@@ -1,8 +1,8 @@
 Package.describe({
   name: "meteortypescript:compiler",
   summary: "TypeScript is a typed superset of JavaScript",
-  version: "0.0.3",
-  git: "git@github.com:meteor-typescript/meteor-typescript-compiler.git"
+  version: "0.0.4",
+  git: "https://github.com/meteor-typescript/meteor-typescript-compiler.git"
 });
 
 Package._transitional_registerBuildPlugin({
