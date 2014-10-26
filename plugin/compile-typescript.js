@@ -65,7 +65,8 @@ function compileCheck(compileStep) {
 }
 
 function compileFromCache(compileStep, future) {
-  
+
+  console.log("compiled from cache");
   var filename = compileStep.inputPath;
   var src = Storage.getItem('cache')[filename];
   if (src && src.length) {
@@ -82,7 +83,8 @@ function compileFromCache(compileStep, future) {
 function compile(compileStep, future) {
 
   var jsVersion = "ES5";
-  if (compileStep.archMatches("browser")) jsVersion = "ES3";
+  if ( compileStep.arch.indexOf("web.") == 0 )
+    jsVersion = "ES3";
 
   var filename = compileStep.inputPath;
   console.log("Compiling " + jsVersion + ' ' + filename);
