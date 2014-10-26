@@ -56,18 +56,18 @@ function compileCheck(compileStep) {
 
 		} else if (wasModified(filename, fstats)) {
 
-			// update timestamp, them compile from disk
-			fileTimestampCache[filename] = fstats.mtime;
-			compile(compileStep, future);
+			// Compile from disk
+			compile(compileStep, future, fstats);
 
 		} else {
 
 			// Compile From Cache - Read Cache
 			var key = getKey(compileStep, filename);
-			console.log("Resolved from cache " + key);
 			var src = Storage.getItem('cache')[key];
 
 			if (src) {
+				console.log("Resolved from cache " + key);
+
 				if (src.length) {
 					compileStep.addJavaScript({
 						path: filename + ".js",
@@ -78,8 +78,9 @@ function compileCheck(compileStep) {
 				}
 				future.return(true);
 			} else {
-				// if not file, typically if jsVersion is different: compile it
-				compile(compileStep, future);
+				// if no match, typically if jsVersion is different, compile this new version
+				// there will be two entries in the cache, one for each jsVersion
+				compile(compileStep, future, fstats);
 			}
 		}
 	});
@@ -87,33 +88,13 @@ function compileCheck(compileStep) {
 	return future;
 }
 
-//function compileFromCache(compileStep, future) {
-//
-//
-//	var filename = compileStep.inputPath;
-//	var key = getKey(compileStep, filename);
-//
-//	console.log("Resolved from cache "+key);
-//
-//	// Read Cache
-//	var src = Storage.getItem('cache')[key];
-//	if (src && src.length) {
-//		compileStep.addJavaScript({
-//			path: filename + ".js",
-//			sourcePath: filename,
-//			data: src,
-//			bare: compileStep.fileOptions.bare
-//		});
-//	}
-//	future.return(true);
-//}
-
-function compile(compileStep, future) {
+function compile(compileStep, future, fstats) {
 
 	var filename = compileStep.inputPath;
 
 	var jsVersion = "ES5";
 	if (compileStep.arch.indexOf("web.") == 0)
+		// for maximum compatibility, front ends should be ES3 compliant
 		jsVersion = "ES3";
 
 	console.log("Compiling " + jsVersion + ' ' + filename);
@@ -147,6 +128,9 @@ function compile(compileStep, future) {
 
 							cache[key] = src;
 							Storage.setItem('cache', cache);
+
+							// Update timestamp
+							fileTimestampCache[filename] = fstats.mtime;
 
 							// Add generated source to compiler output pipeline
 							compileStep.addJavaScript({
