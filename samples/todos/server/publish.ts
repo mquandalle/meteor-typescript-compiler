@@ -1,5 +1,5 @@
-///<reference path="../packages/typescript-libs/ecma.d.ts"/>
-///<reference path="../packages/typescript-libs/meteor.d.ts"/>
+
+///<reference path="../lib/meteor.d.ts"/>
 ///<reference path="../collections.d.ts"/>
 
 // Lists -- {name: String}

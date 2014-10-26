@@ -1,6 +1,6 @@
-///<reference path="../packages/typescript-libs/meteor.d.ts"/>
-///<reference path="../packages/typescript-libs/backbone.d.ts"/>
-///<reference path="../packages/typescript-libs/underscore.d.ts"/>
+///<reference path="../lib/meteor.d.ts"/>
+///<reference path="../lib/backbone.d.ts"/>
+///<reference path="../lib/underscore.d.ts"/>
 ///<reference path="../collections.d.ts"/>
 
 // Client-side JavaScript, bundled and sent to client.
