@@ -23,14 +23,14 @@ function endsWith(str, ends) {
 };
 
 // Check whether a given key has a new modification time
-function wasModified(filename, stats) {
+function wasModified(filename, fstats) {
 	var e = fileTimestampCache[filename];
 	if (!e)
-		return false;
+		return true;
 
-	console.log("current is " + stats.mtime.getTime() + ", stored is " + e.getTime());
+	console.log("current is " + fstats.mtime.getTime() + ", stored is " + e.getTime());
 
-	var e = e.getTime() != stats.mtime.getTime();
+	var e = e.getTime() != fstats.mtime.getTime();
 	return e;
 }
 
@@ -44,7 +44,7 @@ function getKey(compileStep, filename) {
 function compileCheck(compileStep) {
 
 	var future = new Future;
-	fs.stat(compileStep.inputPath, function(err, stats) {
+	fs.stat(compileStep.inputPath, function(err, fstats) {
 		if (err) return false;
 		var filename = compileStep.inputPath;
 		var isDefinitionFile = endsWith(filename, ".d.ts");
@@ -53,14 +53,13 @@ function compileCheck(compileStep) {
 
 			future.return(true);
 
-		} else if (wasModified(filename, stats)) {
+		} else if (wasModified(filename, fstats)) {
 
-			fileTimestampCache[filename] = stats.mtime;
+			fileTimestampCache[filename] = fstats.mtime;
 			compile(compileStep, future);
 
 		} else {
 
-			console.log("compile from cache");
 			compileFromCache(compileStep, future);
 
 		}
@@ -71,10 +70,12 @@ function compileCheck(compileStep) {
 
 function compileFromCache(compileStep, future) {
 
-	console.log("compiled from cache");
 
 	var filename = compileStep.inputPath;
 	var key = getKey(compileStep, filename);
+
+	console.log("Resolved from cache "+key);
+
 
 	// Read Cache
 	var src = Storage.getItem('cache')[key];
@@ -96,6 +97,7 @@ function compile(compileStep, future) {
 	var jsVersion = "ES5";
 	if (compileStep.arch.indexOf("web.") == 0)
 		jsVersion = "ES3";
+
 	console.log("Compiling " + jsVersion + ' ' + filename);
 
 	ts.compile(
@@ -122,6 +124,8 @@ function compile(compileStep, future) {
 							// Store compiled source in cache
 							var cache = Storage.getItem('cache');
 							var key = getKey(compileStep, filename);
+
+							console.log("Storing in cache "+key);
 
 							cache[key] = src;
 							Storage.setItem('cache', cache);
