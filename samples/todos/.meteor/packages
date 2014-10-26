@@ -9,5 +9,5 @@ backbone
 spiderable
 jquery
 insecure
-typescript-compiler
-typescript-libs
+meteortypescript:compiler
+

@@ -23,8 +23,8 @@ That's it! From now on, all `*.ts` files are dynamically compiled into Javascrip
 
 ## Other projects
 
-* You will probably like **meteor.d.ts** at [https://github.com/orefalo/meteor-typescript-libs](https://github.com/orefalo/meteor-typescript-libs)
-* Sample demos built around Meteor+TypeScript [https://github.com/orefalo/meteor-typescript-demos](https://github.com/orefalo/meteor-typescript-demos)
+* You will probably like **meteor.d.ts** at [https://github.com/meteor-typescript/meteor-typescript-libs](https://github.com/meteor-typescript/meteor-typescript-libs)
+* Sample demos built around Meteor+TypeScript [https://github.com/meteor-typescript/meteor-typescript-demos](https://github.com/meteor-typescript/meteor-typescript-demos)
 
 ## Credits
 
@@ -35,6 +35,7 @@ That's it! From now on, all `*.ts` files are dynamically compiled into Javascrip
 
 ## Tips
 
+* Direclty include any reference file in your project (.d.ts)
 * Never reference a **file.ts**, rather generate a **file.d.ts** using `tsc --reference file.ts`.
 * Accessing templates can be a little tricky in TypeScript, prefer `Template['todo']['hello']` to `Template.todo.hello`.
 * Trying to read a form field value? use `(<HTMLInputElement>evt.target).value`.
@@ -42,5 +43,7 @@ That's it! From now on, all `*.ts` files are dynamically compiled into Javascrip
 
 ## Updates
 
-May 6 2014 - switched internal compiler to ts-compiler, full support for ts 1.0
+* **Oct 26 2014** - Upgraded package to latest atmosphere, fixed issues with caching
+* **March 2014** - meteortypescript organization is now live. please join and contribute.
+* **May 6 2014** - switched internal compiler to ts-compiler, full support for ts 1.0
 
