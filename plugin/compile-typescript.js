@@ -28,7 +28,7 @@ function wasModified(filename, fstats) {
 	if (!e)
 		return true;
 
-	console.log("current is " + fstats.mtime.getTime() + ", stored is " + e.getTime());
+	//console.log("current is " + fstats.mtime.getTime() + ", stored is " + e.getTime());
 
 	var e = e.getTime() != fstats.mtime.getTime();
 	return e;
@@ -36,7 +36,10 @@ function wasModified(filename, fstats) {
 
 // Compute the cache key
 function getKey(compileStep, filename) {
-	var jsVersion = "ES5";
+
+	var jsVersion = "ES3";
+	// for now compile everything to ES3
+//	var jsVersion = "ES5";
 	if (compileStep.arch.indexOf("web.") == 0)
 		jsVersion = "ES3";
 	return filename + "|" + jsVersion;
@@ -66,7 +69,7 @@ function compileCheck(compileStep) {
 			var src = Storage.getItem('cache')[key];
 
 			if (src) {
-				console.log("Resolved from cache " + key);
+				//console.log("Resolved from cache " + key);
 
 				if (src.length) {
 					compileStep.addJavaScript({
@@ -92,12 +95,14 @@ function compile(compileStep, future, fstats) {
 
 	var filename = compileStep.inputPath;
 
-	var jsVersion = "ES5";
+	var jsVersion = "ES3";
+	// for now compile everything to ES3
+	//var jsVersion = "ES5";
 	if (compileStep.arch.indexOf("web.") == 0)
 		// for maximum compatibility, front ends should be ES3 compliant
 		jsVersion = "ES3";
 
-	console.log("Compiling " + jsVersion + ' ' + filename);
+	//console.log("Compiling " + jsVersion + ' ' + filename);
 
 	ts.compile(
 		[filename],
@@ -124,7 +129,7 @@ function compile(compileStep, future, fstats) {
 							var cache = Storage.getItem('cache');
 							var key = getKey(compileStep, filename);
 
-							console.log("Storing in cache " + key);
+							//console.log("Storing in cache " + key);
 
 							cache[key] = src;
 							Storage.setItem('cache', cache);
