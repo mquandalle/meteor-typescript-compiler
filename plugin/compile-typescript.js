@@ -9,6 +9,7 @@ Storage.initSync({
 });
 
 // Keep track of mod times for files that have been parsed
+// Holds key->Date
 var Mtimes = {};
 
 // Keep track of files in a cache
@@ -23,7 +24,11 @@ var endsWith = function(str, ends) {
 // Check whether a given key has a new modification time
 var wasModified = function(key, stats) {
   //  !Options.useCache ||
-  return !Mtimes[key] || new Date(Mtimes[key]).getTime() != new Date(stats.mtime).getTime();
+  var e=Mtimes[key];
+  if(!e) return false;
+
+  var e= e.getTime() != stats.mtime.getTime();
+  return e;
 }
 
 function compileCheck(compileStep) {
@@ -35,10 +40,10 @@ function compileCheck(compileStep) {
     var key = filename + "|" + compileStep.arch;
     var isDefinitionFile = endsWith(filename, ".d.ts");
     
-//    if (Mtimes[key])
-//      console.log("current is " + new Date(stats.mtime).getTime() + ", stored is " + new Date(Mtimes[key]).getTime());
-//    else
-//      console.log("stored is undef");
+    if (Mtimes[key])
+      console.log("current is " + new Date(stats.mtime).getTime() + ", stored is " + new Date(Mtimes[key]).getTime());
+    else
+     console.log("stored is undef");
     
     if (isDefinitionFile) {
       // TODO: don't use cache when a .d.ts file changes
@@ -55,7 +60,8 @@ function compileCheck(compileStep) {
       compile(compileStep, future); 
       
     } else {
-      
+
+      console.log("compile from cache "+key);
       compileFromCache(compileStep, future);
       
     }
@@ -87,7 +93,9 @@ function compile(compileStep, future) {
     jsVersion = "ES3";
 
   var filename = compileStep.inputPath;
-  console.log("Compiling " + jsVersion + ' ' + filename);
+  var key = filename + "|" + compileStep.arch;
+
+  console.log("Compiling " + jsVersion + ' ' + key);
 
   ts.compile(
     [filename],
@@ -109,10 +117,15 @@ function compile(compileStep, future) {
             var src = generatedItem.text;
             
             if (src.length > 0) {
+
+              // Store compiled source in cache
               var cache = Storage.getItem('cache');
-              cache[compileStep.inputPath] = src;
+
+              //cache[compileStep.inputPath] = src;
+              cache[key] = src;
               Storage.setItem('cache', cache);
-              
+
+              // Add generated source to compiler output pipeline
               compileStep.addJavaScript({
                 path: filename + ".js",
                 sourcePath: filename,
