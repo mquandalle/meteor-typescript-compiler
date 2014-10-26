@@ -19,12 +19,12 @@ That's it! From now on, all `*.ts` files are dynamically compiled into Javascrip
 * Typescript compiler is the latest and greatest **1.x**
 * Compiler is used for server & client assets
 * Compilation uses ECMAScript5 generation on the server & ECMAScript3 on the client
-* Libraries are not included with the project (ie. lib.d.ts), please bundle them in your project.
+* Libraries are not included with the project (ie. lib.d.ts), please bundle them in your project
 
 ## Other projects
 
 * You will probably like **meteor.d.ts** at [https://github.com/meteor-typescript/meteor-typescript-libs](https://github.com/meteor-typescript/meteor-typescript-libs)
-* Sample demos built around Meteor+TypeScript [https://github.com/meteor-typescript/meteor-typescript-demos](https://github.com/meteor-typescript/meteor-typescript-demos)
+* Sample demos built around Meteor+TypeScript can be found in the **samples** folder
 
 ## Credits
 
@@ -33,17 +33,13 @@ That's it! From now on, all `*.ts` files are dynamically compiled into Javascrip
 * Optimizations by [Alex Atallah](https://github.com/alexanderatallah).
 * Code based from the Meteor coffeescript package
 
-## Tips
+## TypeScript/Meteor coding style
 
-* Direclty include any reference file in your project (.d.ts)
-* Never reference a **file.ts**, rather generate a **file.d.ts** using `tsc --reference file.ts`.
-* Accessing templates can be a little tricky in TypeScript, prefer `Template['todo']['hello']` to `Template.todo.hello`.
-* Trying to read a form field value? use `(<HTMLInputElement>evt.target).value`.
-* [WebStorm 7](http://www.jetbrains.com/webstorm/) is an excellent IDE for TypeScript and Node web applications in general.
+* Please refer to the [coding style section](https://github.com/meteor-typescript/meteor-typescript-libs#usage-collections)
 
 ## Updates
 
 * **Oct 26 2014** - Upgraded package to latest atmosphere, fixed issues with caching
-* **March 2014** - meteortypescript organization is now live. please join and contribute.
+* **March 2014** - meteortypescript organization is now live. please join and contribute
 * **May 6 2014** - switched internal compiler to ts-compiler, full support for ts 1.0
 
