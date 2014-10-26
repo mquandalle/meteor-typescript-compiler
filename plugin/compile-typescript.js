@@ -34,6 +34,7 @@ function wasModified(filename, fstats) {
 	return e;
 }
 
+// Compute the cache key
 function getKey(compileStep, filename) {
 	var jsVersion = "ES5";
 	if (compileStep.arch.indexOf("web.") == 0)
@@ -55,40 +56,57 @@ function compileCheck(compileStep) {
 
 		} else if (wasModified(filename, fstats)) {
 
+			// update timestamp, them compile from disk
 			fileTimestampCache[filename] = fstats.mtime;
 			compile(compileStep, future);
 
 		} else {
 
-			compileFromCache(compileStep, future);
+			// Compile From Cache - Read Cache
+			var key = getKey(compileStep, filename);
+			console.log("Resolved from cache " + key);
+			var src = Storage.getItem('cache')[key];
 
+			if (src) {
+				if (src.length) {
+					compileStep.addJavaScript({
+						path: filename + ".js",
+						sourcePath: filename,
+						data: src,
+						bare: compileStep.fileOptions.bare
+					});
+				}
+				future.return(true);
+			} else {
+				// if not file, typically if jsVersion is different: compile it
+				compile(compileStep, future);
+			}
 		}
 	});
 
 	return future;
 }
 
-function compileFromCache(compileStep, future) {
-
-
-	var filename = compileStep.inputPath;
-	var key = getKey(compileStep, filename);
-
-	console.log("Resolved from cache "+key);
-
-
-	// Read Cache
-	var src = Storage.getItem('cache')[key];
-	if (src && src.length) {
-		compileStep.addJavaScript({
-			path: filename + ".js",
-			sourcePath: filename,
-			data: src,
-			bare: compileStep.fileOptions.bare
-		});
-	}
-	future.return(true);
-}
+//function compileFromCache(compileStep, future) {
+//
+//
+//	var filename = compileStep.inputPath;
+//	var key = getKey(compileStep, filename);
+//
+//	console.log("Resolved from cache "+key);
+//
+//	// Read Cache
+//	var src = Storage.getItem('cache')[key];
+//	if (src && src.length) {
+//		compileStep.addJavaScript({
+//			path: filename + ".js",
+//			sourcePath: filename,
+//			data: src,
+//			bare: compileStep.fileOptions.bare
+//		});
+//	}
+//	future.return(true);
+//}
 
 function compile(compileStep, future) {
 
@@ -125,7 +143,7 @@ function compile(compileStep, future) {
 							var cache = Storage.getItem('cache');
 							var key = getKey(compileStep, filename);
 
-							console.log("Storing in cache "+key);
+							console.log("Storing in cache " + key);
 
 							cache[key] = src;
 							Storage.setItem('cache', cache);
