@@ -1,15 +1,22 @@
 Package.describe({
   name: "meteortypescript:compiler",
-  summary: "TypeScript is a typed superset of JavaScript",
+  summary: "TypeScript is a staticaly typed superset of JavaScript",
   version: "1.0.2",
-  git: "https://github.com/meteor-typescript/meteor-typescript-compiler.git"
+  git: "https://github.com/meteor-typescript/meteor-typescript-compiler.git",
+  version: "2.0.0"
 });
 
 Package._transitional_registerBuildPlugin({
 	name: "compileTypescript",
-	use: [],
+	use: ['meteor'],
 	sources: [
-		'plugin/compile-typescript.js'
+		'plugin/compile-tsc.js'
 	],
-	npmDependencies: {"ts-compiler": "2.0.0", "node-persist" : "0.0.2"}
+	npmDependencies: {
+		"typescript": "1.4.1",
+		"node-persist": "0.0.2",
+		"temp": "0.8.1",
+		"glob": "4.3.5",
+		"rimraf": "2.2.8"
+	}
 });

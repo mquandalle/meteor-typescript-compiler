@@ -1,9 +1,5 @@
 all:
-	echo "mrproper or deploy at this point"
-
-mrproper:
-	echo rm -rf ~/.meteor ~/.meteorite/ ./packages/
-
+	echo "publish or deplay - to release code to atmospherejs.com"
 publish deploy:
 	meteor publish
 

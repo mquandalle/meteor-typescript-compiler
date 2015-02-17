@@ -1,8 +1,5 @@
-/.npm
-/packages
-.build*
+.npm
+build*
 *.log
-/.meteor
 .DS_Store
-
-
+.idea/
