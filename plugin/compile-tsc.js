@@ -8,11 +8,12 @@
 // our lib/a.ts.js.
 
 // TODO Potential optimization is use ES3 across browser and Meteor, and have one compile
+// or better, let the developer pick using global variables.
 
 var fs = Npm.require('fs');
 var Future = Npm.require('fibers/future');
 var Fiber = Npm.require('fibers');
-//var ts = Npm.require('ts-compiler');
+
 var storage = Npm.require('node-persist');
 var exec = Npm.require('child_process').exec;
 var glob = Npm.require('glob');
@@ -37,6 +38,7 @@ var tsErrorRegex = /(.*[.]ts)\((\d+),(\d)+\): (.+)/;
 var placeholderFileName = "main.tsc_placeholder.ts";
 var cordovaPlatformsFileName = ".meteor/cordova-platforms";
 
+// find the TSC path
 var tscPath = function() {
   var bins = glob.sync("~/.meteor/packages/*:tsc/*/plugin.compileTsc.os/npm/compileTsc/node_modules/typescript/bin/tsc").concat(
         glob.sync("packages/*:tsc/.npm/plugin/compileTsc/node_modules/typescript/bin/tsc"),
