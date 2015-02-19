@@ -8,7 +8,7 @@
 // our lib/a.ts.js.
 
 // TODO Potential optimization is use ES3 across browser and Meteor, and have one compile
-// or better, let the developer pick using global variables.
+// or even better, let the developer pick using global
 
 var fs = Npm.require('fs');
 var Future = Npm.require('fibers/future');
@@ -35,7 +35,7 @@ function initArch(archName) {
 }
 
 var tsErrorRegex = /(.*[.]ts)\((\d+),(\d)+\): (.+)/;
-var placeholderFileName = "main.tsc_placeholder.ts";
+var placeholderFileName = "zzz.ts-compiler.ts";
 var cordovaPlatformsFileName = ".meteor/cordova-platforms";
 
 // find the TSC path
@@ -249,7 +249,7 @@ function resetCompilationScopedArch(arch) {
 
 function checkForPlaceholderFile(compileStep) {
   if (!fs.existsSync(placeholderFileName)) {
-    fs.writeFileSync(placeholderFileName, "");
+    fs.writeFileSync(placeholderFileName, "// please add this file to .gitignore - it is used internally by typescript-compiler");
     errorMsg = "Missing required \"" + placeholderFileName + "\" file; it has been created (make sure to add it to your .gitignore). You may have to touch a .ts file to trigger another compilation.";
     if (typeof(compileStep) !== 'undefined') {
       compileStep.error({message: errorMsg});
