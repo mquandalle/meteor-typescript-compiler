@@ -1,9 +1,9 @@
 Package.describe({
-  name: "meteortypescript:compiler",
-  summary: "TypeScript is a staticaly typed superset of JavaScript",
-  version: "1.0.2",
-  git: "https://github.com/meteor-typescript/meteor-typescript-compiler.git",
-  version: "2.0.0"
+	name: "meteortypescript:compiler",
+	summary: "TypeScript is a staticaly typed superset of JavaScript",
+	version: "1.0.2",
+	git: "https://github.com/meteor-typescript/meteor-typescript-compiler.git",
+	version: "2.0.0"
 });
 
 Package._transitional_registerBuildPlugin({

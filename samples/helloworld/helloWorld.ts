@@ -7,7 +7,7 @@ interface EventsDAO {
     createdAt: Date;
 }
 
-declare var Events: Mongo.Collection<EventsDAO>;
+declare var Events:Mongo.Collection<EventsDAO>;
 Events = new Mongo.Collection<EventsDAO>('events');
 
 if (Meteor.isClient) {
@@ -23,7 +23,8 @@ if (Meteor.isClient) {
         "click .container": function () {
 
             // This function is called when the new task form is submitted
-            var text:string = ""+Math.random();;
+            var text:string = "" + Math.random();
+            ;
 
             Events.insert({
                 text: text,
