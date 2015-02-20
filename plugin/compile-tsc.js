@@ -1,27 +1,24 @@
-// NOTE: This has inherent issues in a codebase of differing source languages.
-// E.g. imagine I have lib/a.ts, something/foo.coffee (which depends on a.ts),
-// and a bunch of other .ts files. The problem is we batch all of the .ts
-// together and execute the TypeScript compiler when we get the latest .ts
-// file, but by then the coffee compiler has already been compiled.
-// At the moment, Meteor takes addJavaScript calls and places them directly
-// into the index.html in that order, so the coffee will come before
-// our lib/a.ts.js.
-
-// TODO Potential optimization is use ES3 across browser and Meteor, and have one compile
-// or even better, let the developer pick using global
 
 var fs = Npm.require('fs');
 var Future = Npm.require('fibers/future');
-var Fiber = Npm.require('fibers');
 
-var storage = Npm.require('node-persist');
+// used for sync io
+var Fiber = Npm.require('fibers');
+// used to launch tsc execuable
 var exec = Npm.require('child_process').exec;
+// provides file pattern match
 var glob = Npm.require('glob');
 var path = Npm.require('path');
+// provides temp folder access
 var temp = Npm.require('temp');
+// provides rm -rf
 var rimraf = Npm.require('rimraf');
+// html5 localStorage for node
+var storage = Npm.require('node-persist');
 
 var fsStat = Future.wrap(fs.stat);
+
+// create the code cache
 storage.initSync({
 	dir: 'typescript-cache'
 });
@@ -34,13 +31,13 @@ function initArch(archName) {
 	resetCompilationScopedArch(arch);
 }
 
+// regex to parse errors
 var TS_ERROR_REGEX = /(.*[.]ts)\((\d+),(\d)+\): (.+)/;
 
 // filename used to trigger the missing meteor batch compilation
 var PLACEHOLDER_FILENAME = "zzz.ts-compiler.ts";
 
-
-var cordovaPlatformsFileName = ".meteor/cordova-platforms";
+var CORDOVA_PLATFORMS_FILENAME = ".meteor/cordova-platforms";
 
 // find the TSC path
 var tscPath = function() {
@@ -53,11 +50,13 @@ if (!tscPath) {
 	console.error("Could not find tsc binary")
 }
 
+// create place holder file
 checkForPlaceholderFile();
 
+// that's the plugin code itself
 Plugin.registerSourceHandler("ts", function(compileStep) {
 	if (typeof(archs[compileStep.arch]) === 'undefined') {
-		if (compileStep.arch === 'web.cordova' && !fs.existsSync(cordovaPlatformsFileName)) {
+		if (compileStep.arch === 'web.cordova' && !fs.existsSync(CORDOVA_PLATFORMS_FILENAME)) {
 			// Don't bother compiling for cordova if the 'cordova-platforms' file does not exist
 			return;
 		}
@@ -73,9 +72,8 @@ Plugin.registerSourceHandler("ts", function(compileStep) {
 	// Typically, Meteor hands us all of the files pertaining to an arch in clumps (i.e. all files for browser, then all files for os), so most compiles are only two phases (client and server).
 	for (var archName in archs) {
 		var arch = archs[archName];
-		if (arch.compileSteps.length == 0) {
+		if (arch.compileSteps.length === 0)
 			continue;
-		}
 
 		var hadMod = checkAgainstModTime(arch);
 		compile(arch, compileStep, hadMod);
@@ -149,6 +147,7 @@ function compile(arch, placeholderCompileStep, hadModifications) {
 			var tsFullPath = result.name.substr(0, result.name.length - 2) + "ts";
 			var compileStep = arch.fullPathToCompileSteps[tsFullPath];
 			var src = processGenSource(result.text || "");
+			// store in file cache
 			storage.setItem(b64encode(compileStep.inputPath), src);
 		});
 	});
@@ -253,7 +252,7 @@ function resetCompilationScopedArch(arch) {
 	arch.fullPathToCompileSteps = {};
 }
 
-//
+// ensures the place holder file is in place
 function checkForPlaceholderFile(compileStep) {
 	if (!fs.existsSync(PLACEHOLDER_FILENAME)) {
 		fs.writeFileSync(PLACEHOLDER_FILENAME, "// please add this file to .gitignore - it is used internally by typescript-compiler and must be the last file to compile");
