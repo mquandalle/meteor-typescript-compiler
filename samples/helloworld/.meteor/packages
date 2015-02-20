@@ -6,4 +6,4 @@
 autopublish
 insecure
 standard-app-packages
-jasonparekh:tsc
+meteortypescript:compiler
