@@ -23,7 +23,8 @@ That's it! From now on, all `*.ts` files are dynamically compiled into Javascrip
 
 ## Using Typescript with Meteor
 
-* Please refer to the [coding style section](https://github.com/meteor-typescript/meteor-typescript-libs#usage-collections)
+* Create a lib folder in your project, add **meteor.d.ts** or any other ts description files you may be interested in.
+* Refer to the following [coding guidelines](https://github.com/meteor-typescript/meteor-typescript-libs#usage-collections)
 
 ## Credits
 
@@ -33,7 +34,7 @@ That's it! From now on, all `*.ts` files are dynamically compiled into Javascrip
 ## Updates
 
 * **Feb 17 2015** - typescrypt-compiler v2, batch compilation using tsc - code merged from meteor-tsc, thanks to jason parekh 
+* **Feb 17 2015** - typescrypt-compiler v2, batch compilation using tsc - code merged from meteor-tsc, thanks to jason parekh 
 * **Oct 26 2014** - Upgraded package to latest atmosphere, fixed issues with caching
 * **March 2014** - meteortypescript organization is now live. please join and contribute
 * **May 6 2014** - switched internal compiler to ts-compiler, full support for ts 1.0
-

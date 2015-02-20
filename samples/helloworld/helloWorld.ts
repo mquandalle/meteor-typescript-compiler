@@ -24,7 +24,6 @@ if (Meteor.isClient) {
 
             // This function is called when the new task form is submitted
             var text:string = "" + Math.random();
-            ;
 
             Events.insert({
                 text: text,

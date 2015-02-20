@@ -3,5 +3,7 @@ build*
 *.log
 .DS_Store
 .idea/
-zzz.ts-compiler.ts
+zzz.ts-compiler.*
+*.map
+
 

@@ -256,7 +256,7 @@ function resetCompilationScopedArch(arch) {
 function checkForPlaceholderFile(compileStep) {
 	if (!fs.existsSync(PLACEHOLDER_FILENAME)) {
 		fs.writeFileSync(PLACEHOLDER_FILENAME, "// please add this file to .gitignore - it is used internally by typescript-compiler and must be the last file to compile");
-		var errorMsg = "Missing required \"" + PLACEHOLDER_FILENAME + "\" file; it has been created (make sure to add it to your .gitignore). You may have to touch a .ts file to trigger another compilation.";
+		var errorMsg = "typescript-compiler:The file \"" + PLACEHOLDER_FILENAME + "\" has been created to help batch compilation of typescript assets. Please ignore it from your source control.";
 		if (typeof(compileStep) !== 'undefined') {
 			compileStep.error({message: errorMsg});
 		} else {

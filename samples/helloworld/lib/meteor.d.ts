@@ -663,19 +663,21 @@ interface ReactiveVar<T> {
 
 declare var Template: TemplateStatic;
 interface TemplateStatic {
-	new (): Template;
-	//[templateName: string]: Template; //really should have this here, but not possible in TypeScript with other static members
-	body: TemplateStatic;
+
+	// It should be a strict [templateName: string]: TemplateInstance but it's not possible
+	[templateName: string]: any|TemplateInstance;
+	body: TemplateInstance;
+	head: TemplateInstance;
 	instance(): Blaze.TemplateInstance;
+	find(selector:string):Blaze.TemplateInstance;
+	findAll(selector:string):Blaze.TemplateInstance[];
+	$:any;
 	currentData(): {};
 	parentData(numLevels?: number): {};
 	registerHelper(name: string, helperFunction: Function): void;
-	//orefalo
-	head: TemplateStatic;
-	helpers(helpers:{[id:string]: any}): void;
-	events(eventMap: {[actions: string]: Function}): void;
 }
-interface Template {
+
+interface TemplateInstance {
 	onCreated: Function;
 	onRendered: Function;
 	onDestroyed: Function;
@@ -683,7 +685,7 @@ interface Template {
 	rendered: Function;
 	destroyed: Function;
 	helpers(helpers:{[id:string]: any}): void;
-	events(eventMap: {[actions: string]: Function}): void;
+	events(eventMap:Meteor.EventMap): void;
 }
 
 declare var CompileStep: CompileStepStatic;
