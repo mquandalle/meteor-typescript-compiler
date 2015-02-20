@@ -34,8 +34,12 @@ function initArch(archName) {
 	resetCompilationScopedArch(arch);
 }
 
-var tsErrorRegex = /(.*[.]ts)\((\d+),(\d)+\): (.+)/;
-var placeholderFileName = "zzz.ts-compiler.ts";
+var TS_ERROR_REGEX = /(.*[.]ts)\((\d+),(\d)+\): (.+)/;
+
+// filename used to trigger the missing meteor batch compilation
+var PLACEHOLDER_FILENAME = "zzz.ts-compiler.ts";
+
+
 var cordovaPlatformsFileName = ".meteor/cordova-platforms";
 
 // find the TSC path
@@ -61,7 +65,7 @@ Plugin.registerSourceHandler("ts", function(compileStep) {
 		initArch(compileStep.arch);
 	}
 
-	if (compileStep.inputPath !== placeholderFileName) {
+	if (compileStep.inputPath !== PLACEHOLDER_FILENAME) {
 		handleSourceFile(compileStep);
 		return;
 	}
@@ -97,7 +101,7 @@ function handleSourceFile(compileStep) {
 function checkAgainstModTime(arch) {
 	var hadModifications = false;
 	arch.inputPaths.forEach(function(path) {
-		stats = fsStat(path).wait();
+		var stats = fsStat(path).wait();
 		if (typeof(arch.modTimes[path]) === 'undefined' || arch.modTimes[path].toString() !== stats.mtime.toString()) {
 			hadModifications = true;
 		}
@@ -140,11 +144,11 @@ function compile(arch, placeholderCompileStep, hadModifications) {
 			}
 		}
 
-		results.forEach(function(res) {
-			// res.name is the theoretically-generated js filename
-			var tsFullPath = res.name.substr(0, res.name.length - 2) + "ts";
+		results.forEach(function(result) {
+			// result.name is the theoretically-generated js filename
+			var tsFullPath = result.name.substr(0, result.name.length - 2) + "ts";
 			var compileStep = arch.fullPathToCompileSteps[tsFullPath];
-			var src = processGenSource(res.text || "");
+			var src = processGenSource(result.text || "");
 			storage.setItem(b64encode(compileStep.inputPath), src);
 		});
 	});
@@ -178,7 +182,7 @@ function tscCompile(inputPaths, compileOptions, cb) {
 		return
 	}
 
-	res = glob.sync(path.join(out, '**', '*.js')).map(function(f) {
+	var res = glob.sync(path.join(out, '**', '*.js')).map(function(f) {
 		return {
 			name: path.join(process.cwd(), f.substr(out.length + 1)),
 			text: fs.readFileSync(f, {encoding: 'utf8'})
@@ -193,11 +197,12 @@ function processGenSource(src) {
 	var lines = src.split("\n");
 	for (var i = 0 ; i < lines.length ; i++) {
 		var line = lines[i];
-		if (line.toLowerCase().trim() == "//tsc export" && i + 1 < lines.length) {
+		var p = i+1;
+		if (line.toLowerCase().trim() == "//tsc export" && p < lines.length) {
 			// Removes "var" for var, function and class definitions
-			lines[i + 1] = lines[i + 1].replace(/\s?var\s/, "     ");
+			lines[p] = lines[p].replace(/\s?var\s/, "     ");
 			// Replaces the original "var xyz;" (before the above line executed) with a "if (typeof xyz == 'undefined') { xyz = {}; }" for modules
-			lines[i + 1] = lines[i + 1].replace(/^\s*([$A-Z_][0-9A-Z_$]*);$/i, "if (typeof $1 == 'undefined') { $1 = {}; }");
+			lines[p] = lines[p].replace(/^\s*([$A-Z_][0-9A-Z_$]*);$/i, "if (typeof $1 == 'undefined') { $1 = {}; }");
 			i++;
 		}
 	}
@@ -220,7 +225,8 @@ function recordError(err, placeholderCompileStep, errorNumber, arch, isFromCache
 		arch.cachedErrorReplays.push({err: err, errNumber: errorNumber});
 	}
 
-	if (match = tsErrorRegex.exec(err.toString())) {
+	var match = TS_ERROR_REGEX.exec(err.toString());
+	if (match) {
 		var compileStep = arch.fullPathToCompileSteps[match[1]];
 		if (compileStep) {
 			compileStep.error({
@@ -247,10 +253,11 @@ function resetCompilationScopedArch(arch) {
 	arch.fullPathToCompileSteps = {};
 }
 
+//
 function checkForPlaceholderFile(compileStep) {
-	if (!fs.existsSync(placeholderFileName)) {
-		fs.writeFileSync(placeholderFileName, "// please add this file to .gitignore - it is used internally by typescript-compiler");
-		errorMsg = "Missing required \"" + placeholderFileName + "\" file; it has been created (make sure to add it to your .gitignore). You may have to touch a .ts file to trigger another compilation.";
+	if (!fs.existsSync(PLACEHOLDER_FILENAME)) {
+		fs.writeFileSync(PLACEHOLDER_FILENAME, "// please add this file to .gitignore - it is used internally by typescript-compiler and must be the last file to compile");
+		var errorMsg = "Missing required \"" + PLACEHOLDER_FILENAME + "\" file; it has been created (make sure to add it to your .gitignore). You may have to touch a .ts file to trigger another compilation.";
 		if (typeof(compileStep) !== 'undefined') {
 			compileStep.error({message: errorMsg});
 		} else {
