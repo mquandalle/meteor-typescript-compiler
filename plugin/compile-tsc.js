@@ -85,20 +85,20 @@ Plugin.registerSourceHandler("ts", function(compileStep) {
 function handleSourceFile(compileStep) {
 	var arch = archs[compileStep.arch];
 
-	// This ensures the placeholder file exists. If the placeholder file is absent, we would have never triggered compilation, so the inputPaths would never have gotten cleared.
-	if (arch.inputPaths.indexOf(compileStep.inputPath) != -1) {
-		checkForPlaceholderFile(compileStep);
+	checkForPlaceholderFile(compileStep);
+
+	if (arch.fullInputPaths.indexOf(compileStep.fullInputPath) != -1) {
 		return;
 	}
 
-	arch.inputPaths.push(compileStep.inputPath);
+	arch.fullInputPaths.push(compileStep.fullInputPath);
 	arch.compileSteps.push(compileStep);
 	arch.fullPathToCompileSteps[compileStep._fullInputPath] = compileStep;
 }
 
 function checkAgainstModTime(arch) {
 	var hadModifications = false;
-	arch.inputPaths.forEach(function(path) {
+	arch.fullInputPaths.forEach(function(path) {
 		var stats = fsStat(path).wait();
 		if (typeof(arch.modTimes[path]) === 'undefined' || arch.modTimes[path].toString() !== stats.mtime.toString()) {
 			hadModifications = true;
@@ -123,7 +123,12 @@ function compile(arch, placeholderCompileStep, hadModifications) {
 		return;
 	}
 
-	console.log("\nCompiling TypeScript " + arch.name + " files...");
+	// Typically just the arch name, unless a local package uses TypeScript in which case it will be appended
+	var variantName = arch.name;
+	if (placeholderCompileStep.rootOutputPath != '/') {
+		variantName += " (" + placeholderCompileStep.rootOutputPath.substr(1) + ")";
+	}
+	console.log("\nCompiling TypeScript " + variantName + " files...");
 
 	// Clear cached errors since we're about to re-compile
 	arch.cachedErrorReplays = [];
@@ -134,7 +139,7 @@ function compile(arch, placeholderCompileStep, hadModifications) {
 	};
 
 	// This is synchronous (and our callback will get called multiple times if there are errors)
-	tscCompile(arch.inputPaths, compileOptions, function(err, results) {
+	tscCompile(arch.fullInputPaths, path.dirname(placeholderCompileStep.fullInputPath), compileOptions, function(err, results) {
 		if (err) {
 			recordError(err, placeholderCompileStep, ++errorCount, arch, false);
 			if (typeof(results) === 'undefined') {
@@ -148,7 +153,7 @@ function compile(arch, placeholderCompileStep, hadModifications) {
 			var compileStep = arch.fullPathToCompileSteps[tsFullPath];
 			var src = processGenSource(result.text || "");
 			// store in file cache
-			storage.setItem(b64encode(compileStep.inputPath), src);
+			storage.setItem(b64encode(compileStep.fullInputPath), src);
 		});
 	});
 
@@ -157,9 +162,9 @@ function compile(arch, placeholderCompileStep, hadModifications) {
 }
 
 // Generally matches the signature of the previous ts.compile
-function tscCompile(inputPaths, compileOptions, cb) {
+function tscCompile(fullInputPaths, placeholderDirPath, compileOptions, cb) {
 	var out = temp.mkdirSync('tsc-out');
-	var args = '"' + [tscPath, '--outDir', out, '--target', compileOptions.target || 'ES5'].concat(inputPaths).join('" "') + '"';
+	var args = '"' + [tscPath, '--outDir', out, '--target', compileOptions.target || 'ES5'].concat(fullInputPaths).join('" "') + '"';
 
 	var fiber = Fiber.current;
 	var execErr, execStdout, execStderr;
@@ -183,7 +188,7 @@ function tscCompile(inputPaths, compileOptions, cb) {
 
 	var res = glob.sync(path.join(out, '**', '*.js')).map(function(f) {
 		return {
-			name: path.join(process.cwd(), f.substr(out.length + 1)),
+			name: path.join(placeholderDirPath, f.substr(out.length + 1)),
 			text: fs.readFileSync(f, {encoding: 'utf8'})
 		}
 	});
@@ -214,7 +219,7 @@ function addJavaScriptFromCacheInOrder(arch) {
 		compileStep.addJavaScript({
 			path: compileStep.inputPath + ".js",
 			sourcePath: compileStep.inputPath,
-			data: storage.getItem(b64encode(compileStep.inputPath)) || ""
+			data: storage.getItem(b64encode(compileStep.fullInputPath)) || ""
 		})
 	});
 }
@@ -240,23 +245,25 @@ function recordError(err, placeholderCompileStep, errorNumber, arch, isFromCache
 
 	placeholderCompileStep.error({
 		message: err.toString(),
-		sourcePath: placeholderCompileStep.inputPath,
+		sourcePath: placeholderCompileStep.fullInputPath,
 		line: errorNumber,
 		column: 1
 	});
 }
 
 function resetCompilationScopedArch(arch) {
-	arch.inputPaths = [];
+	arch.fullInputPaths = [];
 	arch.compileSteps = [];
 	arch.fullPathToCompileSteps = {};
 }
 
 // ensures the place holder file is in place
 function checkForPlaceholderFile(compileStep) {
-	if (!fs.existsSync(PLACEHOLDER_FILENAME)) {
-		fs.writeFileSync(PLACEHOLDER_FILENAME, "// please add this file to .gitignore - it is used internally by typescript-compiler and must be the last file to compile");
-		var errorMsg = "typescript-compiler:The file \"" + PLACEHOLDER_FILENAME + "\" has been created to help batch compilation of typescript assets. Please ignore it from your source control.";
+	// Either curPath should be e.g. zzz.ts-compiler.ts or packages/myPkg/zzz.ts-compiler.ts
+	var curPath = (!compileStep || compileStep.rootOutputPath == '/') ? PLACEHOLDER_FILENAME : compileStep.rootOutputPath.substr(1) + "/" + PLACEHOLDER_FILENAME;
+	if (!fs.existsSync(curPath)) {
+		fs.writeFileSync(curPath, "// please add this file to .gitignore - it is used internally by typescript-compiler and must be the last file to compile");
+		var errorMsg = "typescript-compiler:The file \"" + curPath + "\" has been created to help batch compilation of typescript assets. Please ignore it from your source control.";
 		if (typeof(compileStep) !== 'undefined') {
 			compileStep.error({message: errorMsg});
 		} else {
