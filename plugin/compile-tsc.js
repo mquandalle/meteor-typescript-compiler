@@ -153,20 +153,21 @@ function compile(arch, placeholderCompileStep, hadModifications) {
 			// result.name is the theoretically-generated js filename
 			var tsFullPath = result.name.substr(0, result.name.length - 2) + "ts";
 			var compileStep = arch.fullPathToCompileSteps[tsFullPath];
-			var src = processGenSource(result.text || "");
+			var src = processGenSource(result.src || "");
+			var map = result.map || "";
 			// store in file cache
-			storage.setItem(b64encode(compileStep.fullInputPath), src);
+			storage.setItem(b64encode(compileStep.fullInputPath), [src, map]);
 		});
 	});
 
-	console.log("Done")
+	console.log("Done");
 	addJavaScriptFromCacheInOrder(arch);
 }
 
 // Generally matches the signature of the previous ts.compile
 function tscCompile(fullInputPaths, placeholderDirPath, compileOptions, cb) {
 	var out = temp.mkdirSync('tsc-out');
-	var args = '"' + [tscPath, '--removeComments', '--outDir', out, '--target', compileOptions.target || 'ES5'].concat(fullInputPaths).join('" "') + '"';
+	var args = '"' + [tscPath, '--sourceMap', '--removeComments', '--outDir', out, '--target', compileOptions.target || 'ES5'].concat(fullInputPaths).join('" "') + '"';
 
 	var fiber = Fiber.current;
 	var execErr, execStdout, execStderr;
@@ -180,19 +181,21 @@ function tscCompile(fullInputPaths, placeholderDirPath, compileOptions, cb) {
 
 	if (execStderr) {
 		cb("\n" + execStderr);
-		return
+		return;
 	}
 
 	if (execStdout) {
 		cb("\n" + execStdout);
-		return
+		return;
 	}
 
 	var res = glob.sync(path.join(out, '**', '*.js')).map(function(f) {
+
 		return {
 			name: path.join(placeholderDirPath, f.substr(out.length + 1)),
-			text: fs.readFileSync(f, {encoding: 'utf8'})
-		}
+			src: fs.readFileSync(f, {encoding: 'utf8'}),
+			map: fs.readFileSync(f.path.basename(f, '.js')+".map", {encoding: 'utf8'})
+		};
 	});
 
 	rimraf.sync(out);
@@ -218,18 +221,21 @@ function processGenSource(src) {
 
 function addJavaScriptFromCacheInOrder(arch) {
 	arch.compileSteps.forEach(function(compileStep) {
+
+		var item=storage.getItem(b64encode(compileStep.fullInputPath));
+
 		compileStep.addJavaScript({
 			path: compileStep.inputPath + ".js",
 			sourcePath: compileStep.inputPath,
-			data: storage.getItem(b64encode(compileStep.fullInputPath)) || ""
+			data: item[0] || "",
+			map: item[1] || ""
 		})
 	});
 }
 
 function recordError(err, placeholderCompileStep, errorNumber, arch, isFromCache) {
-	if (!isFromCache) {
+	if (!isFromCache)
 		arch.cachedErrorReplays.push({err: err, errNumber: errorNumber});
-	}
 
 	var match = TS_ERROR_REGEX.exec(err.toString());
 	if (match) {
