@@ -196,7 +196,7 @@ function tscCompile(fullInputPaths, placeholderDirPath, compileOptions, cb) {
 		return {
 			name: n,
 			src: fs.readFileSync(f, {encoding: 'utf8'}),
-			map: fs.readFileSync(n.basename(f, '.js')+".map", {encoding: 'utf8'})
+			map: fs.readFileSync(path.basename(f, '.js')+".map", {encoding: 'utf8'})
 		};
 	});
 
