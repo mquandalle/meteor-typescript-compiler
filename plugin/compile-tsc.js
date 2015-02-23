@@ -1,4 +1,3 @@
-
 var fs = Npm.require('fs');
 var Future = Npm.require('fibers/future');
 
@@ -192,11 +191,10 @@ function tscCompile(fullInputPaths, placeholderDirPath, compileOptions, cb) {
 
 	var res = glob.sync(path.join(out, '**', '*.js')).map(function(f) {
 
-		var n=path.join(placeholderDirPath, f.substr(out.length + 1));
 		return {
-			name: n,
+			name: path.join(placeholderDirPath, f.substr(out.length + 1)),
 			src: fs.readFileSync(f, {encoding: 'utf8'}),
-			map: fs.readFileSync(path.basename(f, '.js')+".map", {encoding: 'utf8'})
+			map: fs.readFileSync(f + ".map", {encoding: 'utf8'})
 		};
 	});
 
@@ -208,7 +206,7 @@ function processGenSource(src) {
 	var lines = src.split("\n");
 	for (var i = 0 ; i < lines.length ; i++) {
 		var line = lines[i];
-		var p = i+1;
+		var p = i + 1;
 		if (line.toLowerCase().trim() == "//tsc export" && p < lines.length) {
 			// Removes "var" for var, function and class definitions
 			lines[p] = lines[p].replace(/\s?var\s/, "     ");
@@ -224,14 +222,16 @@ function processGenSource(src) {
 function addJavaScriptFromCacheInOrder(arch) {
 	arch.compileSteps.forEach(function(compileStep) {
 
-		var item=storage.getItem(b64encode(compileStep.fullInputPath));
+		var item = storage.getItem(b64encode(compileStep.fullInputPath));
+		if(item) {
 
-		compileStep.addJavaScript({
-			path: compileStep.inputPath + ".js",
-			sourcePath: compileStep.inputPath,
-			data: item[0] || "",
-			sourceMap: item[1] || ""
-		})
+			compileStep.addJavaScript({
+				path: compileStep.inputPath + ".js",
+				sourcePath: compileStep.inputPath,
+				data: item[0] || "",
+				sourceMap: item[1] || ""
+			})
+		}
 	});
 }
 
