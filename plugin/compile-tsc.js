@@ -150,6 +150,7 @@ function compile(arch, placeholderCompileStep, hadModifications) {
 		}
 
 		results.forEach(function(result) {
+
 			// result.name is the theoretically-generated js filename
 			var tsFullPath = result.name.substr(0, result.name.length - 2) + "ts";
 			var compileStep = arch.fullPathToCompileSteps[tsFullPath];
@@ -191,10 +192,11 @@ function tscCompile(fullInputPaths, placeholderDirPath, compileOptions, cb) {
 
 	var res = glob.sync(path.join(out, '**', '*.js')).map(function(f) {
 
+		var n=path.join(placeholderDirPath, f.substr(out.length + 1));
 		return {
-			name: path.join(placeholderDirPath, f.substr(out.length + 1)),
+			name: n,
 			src: fs.readFileSync(f, {encoding: 'utf8'}),
-			map: fs.readFileSync(f.basename(f, '.js')+".map", {encoding: 'utf8'})
+			map: fs.readFileSync(n.basename(f, '.js')+".map", {encoding: 'utf8'})
 		};
 	});
 
