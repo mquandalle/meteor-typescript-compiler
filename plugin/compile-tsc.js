@@ -228,7 +228,7 @@ function addJavaScriptFromCacheInOrder(arch) {
 			path: compileStep.inputPath + ".js",
 			sourcePath: compileStep.inputPath,
 			data: item[0] || "",
-			map: item[1] || ""
+			sourceMap: item[1] || ""
 		})
 	});
 }
