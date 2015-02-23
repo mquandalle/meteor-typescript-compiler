@@ -1,5 +1,5 @@
-/// <reference path="lib/meteor.d.ts" />
-/// <reference path="lib/node.d.ts" />
+/// <reference path="definitions/meteor.d.ts" />
+/// <reference path="definitions/node.d.ts" />
 
 
 interface EventsDAO {
