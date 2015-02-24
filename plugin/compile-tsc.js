@@ -160,7 +160,7 @@ function compile(arch, placeholderCompileStep, hadModifications) {
 		});
 	});
 
-	console.log("Done");
+	//console.log("\nDone");
 	addJavaScriptFromCacheInOrder(arch);
 }
 

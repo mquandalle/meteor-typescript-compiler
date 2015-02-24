@@ -20,6 +20,8 @@ interface EJSON extends JSON {}
 //    [templateName: string]: Meteor.TemplatePage;
 //}
 
+declare function check(value:any, pattern:any);
+
 declare module Match {
     var Any;
     var String;
@@ -676,7 +678,6 @@ interface TemplateStatic {
 	parentData(numLevels?: number): {};
 	registerHelper(name: string, helperFunction: Function): void;
 }
-
 interface Template {
 	onCreated: Function;
 	onRendered: Function;
