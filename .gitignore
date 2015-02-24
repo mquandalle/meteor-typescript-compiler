@@ -1,9 +1,10 @@
-.npm
-build*
-*.log
-.DS_Store
+.npm/
 .idea/
 zzz.ts-compiler.*
+versions.json
+
+.DS_Store
+
+build*
 *.map
-
-
+*.log
