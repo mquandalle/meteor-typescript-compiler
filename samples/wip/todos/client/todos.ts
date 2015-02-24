@@ -1,6 +1,6 @@
-///<reference path="../lib/meteor.d.ts"/>
-///<reference path="../lib/backbone.d.ts"/>
-///<reference path="../lib/underscore.d.ts"/>
+///<reference path="../.meteor/local/build/programs/server/assets/packages/meteortypescript_typescript-libs/definitions/meteor.d.ts" />
+///<reference path="../.meteor/local/build/programs/server/assets/packages/meteortypescript_typescript-libs/definitions/backbone.d.ts"/>
+///<reference path="../.meteor/local/build/programs/server/assets/packages/meteortypescript_typescript-libs/definitions/underscore.d.ts"/>
 ///<reference path="../collections.d.ts"/>
 
 // Client-side JavaScript, bundled and sent to client.
@@ -32,7 +32,7 @@ var listsHandle = Meteor.subscribe('lists', function () {
     }
 });
 
-var todosHandle = null;
+var todosHandle:Meteor.SubscriptionHandle = null;
 // Always be subscribed to the todos for the selected list.
 Tracker.autorun(function () {
     var list_id = Session.get('list_id');

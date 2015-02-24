@@ -1,4 +1,4 @@
-///<reference path="../lib/meteor.d.ts"/>
+///<reference path="../.meteor/local/build/programs/server/assets/packages/meteortypescript_typescript-libs/definitions/meteor.d.ts" />
 ///<reference path="../collections.d.ts"/>
 
 // if the database is empty on server start, create some sample data.

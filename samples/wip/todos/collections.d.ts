@@ -1,4 +1,4 @@
-/// <reference path="lib/meteor.d.ts" />
+/// <reference path=".meteor/local/build/programs/server/assets/packages/meteortypescript_typescript-libs/definitions/meteor.d.ts" />
 
 interface TodoDAO {
     _id?: string;
