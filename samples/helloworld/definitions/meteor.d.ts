@@ -663,21 +663,21 @@ interface ReactiveVar<T> {
 
 declare var Template: TemplateStatic;
 interface TemplateStatic {
-
+	new (): Template;
 	// It should be a strict [templateName: string]: TemplateInstance but it's not possible
-	[templateName: string]: any|TemplateInstance;
-	body: TemplateInstance;
-	head: TemplateInstance;
-	instance(): Blaze.TemplateInstance;
-	find(selector:string):Blaze.TemplateInstance;
-	findAll(selector:string):Blaze.TemplateInstance[];
+	[templateName: string]: any|Template;
+	body: Template;
+	head: Template;
+	instance(): Blaze.Template;
+	find(selector:string):Blaze.Template;
+	findAll(selector:string):Blaze.Template[];
 	$:any;
 	currentData(): {};
 	parentData(numLevels?: number): {};
 	registerHelper(name: string, helperFunction: Function): void;
 }
 
-interface TemplateInstance {
+interface Template {
 	onCreated: Function;
 	onRendered: Function;
 	onDestroyed: Function;
@@ -685,7 +685,7 @@ interface TemplateInstance {
 	rendered: Function;
 	destroyed: Function;
 	helpers(helpers:{[id:string]: any}): void;
-	events(eventMap:Meteor.EventMap): void;
+	events(eventMap: {[actions: string]: Function}): void;
 }
 
 declare var CompileStep: CompileStepStatic;

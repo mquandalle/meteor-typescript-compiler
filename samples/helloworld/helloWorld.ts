@@ -18,7 +18,6 @@ if (Meteor.isClient) {
         }
     });
 
-
     Template.body.events({
         "click .container": function () {
 
