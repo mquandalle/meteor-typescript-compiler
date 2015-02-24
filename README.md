@@ -10,6 +10,8 @@ See [http://www.typescriptlang.org](http://www.typescriptlang.org) for more info
 
 ## Install
 
+* Run `npm install -g typescript`, you must be running version 1.4*
+
 * From your Meteor project, type `meteor add meteortypescript:compiler`
 
 That's it! From now on, all `*.ts` files are dynamically compiled into Javascript (client and server).
