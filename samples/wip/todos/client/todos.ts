@@ -32,7 +32,7 @@ var listsHandle = Meteor.subscribe('lists', function () {
     }
 });
 
-var todosHandle:Meteor.SubscriptionHandle = null;
+var todosHandle = null;
 // Always be subscribed to the todos for the selected list.
 Tracker.autorun(function () {
     var list_id = Session.get('list_id');
@@ -237,19 +237,19 @@ Template['todo_item'].events({
         Todos.remove(this._id);
     },
 
-    'click .addtag': function (evt:Meteor.Event, tmpl:Blaze.TemplateInstance) {
+    'click .addtag': function (evt, tmpl:Blaze.TemplateInstance) {
         Session.set('editing_addtag', this._id);
         Tracker.flush(); // update DOM before focus
         activateInput(tmpl.find("#edittag-input"));
     },
 
-    'dblclick .display .todo-text': function (evt:Meteor.Event, tmpl:Blaze.TemplateInstance) {
+    'dblclick .display .todo-text': function (evt, tmpl:Blaze.TemplateInstance) {
         Session.set('editing_itemname', this._id);
         Tracker.flush();
         // update DOM before focus
         activateInput(tmpl.find("#todo-input"));
     },
-    'click .remove': function (evt:Meteor.Event) {
+    'click .remove': function (evt) {
         var tag = this.tag;
         var id = this.todo_id;
         Todos.update({_id: id}, {$pull: {tags: tag}});
