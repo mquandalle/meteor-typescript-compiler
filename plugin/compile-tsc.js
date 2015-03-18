@@ -43,11 +43,13 @@ var tscPath = function() {
 	var bins = glob.sync("~/.meteor/packages/*:tsc/*/plugin.compileTsc.os/npm/compileTsc/node_modules/typescript/bin/tsc").concat(
 		glob.sync("packages/*:tsc/.npm/plugin/compileTsc/node_modules/typescript/bin/tsc"),
 		glob.sync("/usr/local/bin/tsc"));
-	return bins[0];
+	if (bins.length === 0) {
+		console.error("Could not find tsc binary, defaulting to 'tsc'.")
+		return "tsc";
+	} else {	
+		return bins[0];
+	}
 }();
-if (!tscPath) {
-	console.error("Could not find tsc binary")
-}
 
 // create place holder file
 checkForPlaceholderFile();
