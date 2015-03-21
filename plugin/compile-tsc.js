@@ -155,10 +155,12 @@ function compile(arch, placeholderCompileStep, hadModifications) {
 			// result.name is the theoretically-generated js filename
 			var tsFullPath = result.name.substr(0, result.name.length - 2) + "ts";
 			var compileStep = arch.fullPathToCompileSteps[tsFullPath];
-			var src = processGenSource(result.src || "");
-			var map = result.map || "";
-			// store in file cache
-			storage.setItem(b64encode(compileStep.fullInputPath), [src, map]);
+			if (compileStep) {
+				var src = processGenSource(result.src || "");
+				var map = result.map || "";
+				// store in file cache
+				storage.setItem(b64encode(compileStep.fullInputPath), [src, map]);
+			}
 		});
 	});
 
