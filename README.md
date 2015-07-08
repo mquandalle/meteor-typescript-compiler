@@ -12,6 +12,8 @@ See [http://www.typescriptlang.org](http://www.typescriptlang.org) for more info
 
 * Run `npm install -g typescript`, you must be running version 1.4*
 
+* If on Windows, please install the Visual Studio plugin instead of using NPM. All versions are supported through this method.
+
 * From your Meteor project, type `meteor add meteortypescript:compiler`
 
 That's it! From now on, all `*.ts` files are dynamically compiled into Javascript (client and server).
@@ -35,7 +37,7 @@ That's it! From now on, all `*.ts` files are dynamically compiled into Javascrip
 * The code is based from the Meteor coffeescript package.
 
 ## Updates
-
+* **Jul 8 2015** - fixed an issue where tsc could not be found on Windows (must install TypeScript for Visual Studio).
 * **Feb 22 2015** - support for source maps. comments are now removed from generated files.
 * **Feb 17 2015** - typescrypt-compiler v2, batch compilation using tsc - code merged from meteor-tsc, thanks to jason parekh.
 * **Oct 26 2014** - Upgraded package to latest atmosphere, fixed issues with caching.
