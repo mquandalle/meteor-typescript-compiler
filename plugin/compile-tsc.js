@@ -42,6 +42,7 @@ var CORDOVA_PLATFORMS_FILENAME = ".meteor/cordova-platforms";
 var tscPath = function() {
 	var bins = glob.sync("~/.meteor/packages/*:tsc/*/plugin.compileTsc.os/npm/compileTsc/node_modules/typescript/bin/tsc").concat(
 		glob.sync("packages/*:tsc/.npm/plugin/compileTsc/node_modules/typescript/bin/tsc"),
+		glob.sync("C:/Program Files (x86)/Microsoft SDKs/TypeScript/**/tsc.exe"),
 		glob.sync("/usr/local/bin/tsc"));
 	if (bins.length === 0) {
 		console.error("Could not find tsc binary, defaulting to 'tsc'.")
