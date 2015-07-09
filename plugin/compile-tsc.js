@@ -276,6 +276,11 @@ function resetCompilationScopedArch(arch) {
 function checkForPlaceholderFile(compileStep) {
 	// Either curPath should be e.g. zzz.ts-compiler.ts or packages/myPkg/zzz.ts-compiler.ts
 	var curPath = (!compileStep || compileStep.rootOutputPath == '/') ? PLACEHOLDER_FILENAME : compileStep.rootOutputPath.substr(1) + "/" + PLACEHOLDER_FILENAME;
+	
+	// Check and see if we are trying to create the placeholder file in the root directory, if we are, then switch over to the fullInputPath that we
+	// receive from the compileStep object.
+	if (compileStep && curPath === '/zzz.ts-compiler.ts') curPath = compileStep.fullInputPath;
+	
 	if (!fs.existsSync(curPath)) {
 		fs.writeFileSync(curPath, "// please add this file to .gitignore - it is used internally by typescript-compiler and must be the last file to compile\n// This needs some real logic so that tsc will use this dir as the starting path for all produced output\nif (true) {}\n");
 		var errorMsg = "typescript-compiler:The file \"" + curPath + "\" has been created to help batch compilation of typescript assets. Please ignore it from your source control.";
