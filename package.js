@@ -12,7 +12,7 @@ Package._transitional_registerBuildPlugin({
 		'plugin/compile-tsc.js'
 	],
 	npmDependencies: {
-		"typescript": "1.4.1",
+		"typescript": "1.6.2",
 		"node-persist": "0.0.3",
 		"temp": "0.8.1",
 		"glob": "4.4.0",
