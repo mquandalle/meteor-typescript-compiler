@@ -174,7 +174,7 @@ function compile(arch, placeholderCompileStep, hadModifications) {
 // Generally matches the signature of the previous ts.compile
 function tscCompile(fullInputPaths, placeholderDirPath, compileOptions, cb) {
 	var out = temp.mkdirSync('tsc-out');
-	var args = '"' + [tscPath, '--sourceMap', '--removeComments', '--outDir', out, '--target', compileOptions.target || 'ES5'].concat(fullInputPaths).join('" "') + '"';
+	var args = '"' + [tscPath, '--sourceMap', '--jsx', 'react', '--removeComments', '--outDir', out, '--target', compileOptions.target || 'ES5'].concat(fullInputPaths).join('" "') + '"';
 
 	var fiber = Fiber.current;
 	var execErr, execStdout, execStderr;
