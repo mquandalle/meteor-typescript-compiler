@@ -58,7 +58,7 @@ var tscPath = function() {
 checkForPlaceholderFile();
 
 // that's the plugin code itself
-Plugin.registerSourceHandler("ts", function(compileStep) {
+function sourceHandler(compileStep) {
 	if (typeof(archs[compileStep.arch]) === 'undefined') {
 		if (compileStep.arch === 'web.cordova' && !fs.existsSync(CORDOVA_PLATFORMS_FILENAME)) {
 			// Don't bother compiling for cordova if the 'cordova-platforms' file does not exist
@@ -85,7 +85,10 @@ Plugin.registerSourceHandler("ts", function(compileStep) {
 		compile(arch, compileStep, hadMod);
 		resetCompilationScopedArch(arch);
 	}
-});
+}
+
+Plugin.registerSourceHandler("tsx", sourceHandler);
+Plugin.registerSourceHandler("ts", sourceHandler);
 
 // Save the file input path, and return back to Meteor
 function handleSourceFile(compileStep) {
@@ -157,7 +160,7 @@ function compile(arch, placeholderCompileStep, hadModifications) {
 
 			// result.name is the theoretically-generated js filename
 			var tsFullPath = result.name.substr(0, result.name.length - 2) + "ts";
-			var compileStep = arch.fullPathToCompileSteps[tsFullPath];
+			var compileStep = arch.fullPathToCompileSteps[tsFullPath] || arch.fullPathToCompileSteps[tsFullPath+"x"];
 			if (compileStep) {
 				var src = processGenSource(result.src || "");
 				var map = result.map || "";
