@@ -6,5 +6,6 @@
 autopublish
 insecure
 standard-app-packages
-meteortypescript:compiler
 meteortypescript:typescript-libs
+standard-minifiers
+barbatus:ts-compilers
