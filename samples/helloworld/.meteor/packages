@@ -8,4 +8,4 @@ insecure
 standard-app-packages
 meteortypescript:typescript-libs
 standard-minifiers
-barbatus:ts-compilers
+meteortypescript:compiler
