@@ -51,7 +51,7 @@ The options which are not considered are declaration, project, watch (file chang
 
 ## Credits
 
-* Many thanks to [Alex Barbatus](https://github.com/jasonparekh). This verion would have not been posible without his work.
+* Many thanks to [Alex Barbatus](https://github.com/jasonparekh). This version would have not been possible without his work.
 
 ## Updates
 * **Nov 1st 2015** - Compiler module changed to support Meteor 1.2.x
