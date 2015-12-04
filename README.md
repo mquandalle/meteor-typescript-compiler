@@ -43,7 +43,7 @@ For instance:
 The package extends usage with the following additions:
 
 * **noResolve**: true | false - When set to true referencedFiles array will be always empty.
-* **alwaysThrow**: true | false - When set, tells the compiler to throw exceptions whenever syntactic or semantic error occurs. The default behavior is to throw on syntactic errors.
+* **alwaysThrow**: true | false - When set, tells the compiler to throw exceptions whenever syntactic or semantic ("module not found", for example) error occurs. The default behavior is to throw on syntactic errors.
 * **useCache**: true | false - When set, enables caching of generated files.
 
 The options which are not considered are declaration, project, watch (file changes watch is expected to done via Meteor plugins), inlineSourceMap, inlineSources, outDir, outFile, rootDir, sourceRoot.
@@ -51,7 +51,7 @@ The options which are not considered are declaration, project, watch (file chang
 
 ## Credits
 
-* Many thanks to [Alex Barbatus](https://github.com/jasonparekh). This version would have not been possible without his work.
+* A TypeScript compiler that used in this package provided by the [ts-compilers](https://github.com/barbatus/ts-compilers).
 
 ## Updates
 * **Nov 1st 2015** - Compiler module changed to support Meteor 1.2.x

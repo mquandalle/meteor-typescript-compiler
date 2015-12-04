@@ -11,7 +11,7 @@ Package.registerBuildPlugin({
 		'plugin/compile-ts.js'
 	],
 	use: [
-		'barbatus:ts-compilers@0.1.8',
+		'barbatus:ts-compilers@0.1.9_4',
 		'ecmascript@0.1.4'
 	]
 });

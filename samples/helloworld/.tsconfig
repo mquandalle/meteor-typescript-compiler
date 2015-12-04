@@ -2,6 +2,6 @@
   "diagnostics": true,
   "module": "none",
   "alwaysThrow": true,
-  "noResolve": true,
+  "noResolve": false,
   "useCache": false
 }
