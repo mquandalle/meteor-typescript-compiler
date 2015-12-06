@@ -1,11 +1,13 @@
-'use strict';
+/// <reference path="./typings/meteor/meteor.d.ts" />
 
-class HelloWorld {
-    constructor(public name: string = 'World') {}
+class Greetings extends Mongo.Collection<Object> {
+    constructor(public name: string = 'World') {
+      super(null);
+    }
 
-    toString() {
+    findOne() {
         return `Hello ${this.name}`;
     }
 }
 
-console.log(new HelloWorld().toString());
+console.log(new Greetings().findOne());
