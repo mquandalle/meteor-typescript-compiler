@@ -103,8 +103,8 @@ As an alternative, you can use [https://github.com/meteor-typescript/meteor-type
 * This package is based on [ts-compilers](https://github.com/barbatus/ts-compilers) TypeScript compilers package.
 
 ## Updates
-* **Feb 10 20016** - TypeScript Compilee updated to the latest version, which uses `tsconfig.json` instead `.tsconfig`.
-`tsconfig.json` is now being watched as any other `ts`-file, which means, in case of any changes, your project will be recompiled with the new config.
+* **Feb 10 20016** - TypeScript Compiler updated to the latest version, which notably uses `tsconfig.json` instead of `.tsconfig`.
+`tsconfig.json` is now being watched as well as any other `ts`-file, which means, in case of its changes, your project will be recompiled with the new config.
 * **Nov 1st 2015** - Compiler module changed to support Meteor 1.2.x
 * **Jul 8 2015** - fixed an issue on Windows where zzz.ts-compiler.ts would try and make itself on the C:\ drive if your project was located in My Documents. - Jacob Foster
 * **Jul 8 2015** - fixed an issue where tsc could not be found on Windows (must install TypeScript for Visual Studio) - Jacob Foster
