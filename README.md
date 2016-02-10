@@ -8,9 +8,9 @@ With this meteor plugin, TypeScript files (ending is .ts) are automatically comp
 
 ## What's included?
 
-* Transparent compilation of Typescript assets on the Meteor platform.
-* Libraries such as **meteor.d.ts** or **node.d.ts** are not bundled with the project (ie. ), please grab them from [https://github.com/meteor-typescript/meteor-typescript-libs](https://github.com/meteor-typescript/meteor-typescript-libs) or install them with help of special tools (see below).
-* Sample demos built around Meteor+TypeScript can be found in the **samples** folder.
+* Transparent compilation of Typescript assets on the Meteor platform
+* Libraries such as **meteor.d.ts** or **node.d.ts** are not bundled with the project, please grab them from [https://github.com/meteor-typescript/meteor-typescript-libs](https://github.com/meteor-typescript/meteor-typescript-libs) or install them with help of special tools (see below)
+* Sample demos built around Meteor+TypeScript can be found in the **samples** folder
 
 ## Install
 
@@ -42,11 +42,11 @@ For instance, a valid `tsconfig.json` may look like:
  }
  ```
 
-You may like to make use of some the additional options.
+You may like to use some of the additional options.
 Check out them [here](https://github.com/barbatus/ts-compilers#typescript-config).
 
 Default TypeScript configuration has `module` set to `system`, which means each file will be compiled to a SystemJS module.
-In order to make it work, add `systemjs:systemjs` package to you app or package or remove SystemJS setting `module` to `none` in the config file.
+In order to make it work, add `systemjs:systemjs` package to you app or package or remove SystemJS completely setting `module` to `none` in the config file.
 
 ## Typings
 
@@ -65,9 +65,9 @@ There are two ways to add typings:
     compilerOptions: {
       ...
     },
-    files: {
+    files: [
       "typings/foo.d.ts"
-    }
+    ]
   }
 ```
 
@@ -76,8 +76,8 @@ There are two ways to add typings:
 
 ## Third Party Libraries' Typings
 
-It's recommended to use `typings` tool to search and install typings of third party libraries.
-This tool can search across and install typings from multiple global repos including [DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped).
+It's recommended to use [`typings`](https://github.com/typings/typings) tool to search and install typings of any third party library.
+This tool can search and install typings from multiple global repos including well-known [DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped).
 
 For example, to install Meteor typings, just hit:
 
@@ -86,15 +86,24 @@ npm install typings -g
 typings install meteor --ambient
 ```
 
-As an alternative, you can use [https://github.com/meteor-typescript/meteor-typescript-libs](https://github.com/meteor-typescript/meteor-typescript-libs) package that contains multiple typigns useful in a Meteor project.
+This will add Meteor definition files linked together in the root definition file called `main.d.ts`:
+Add `typings/main.d.ts` to your config accordingly:
 
-* Create a /typings/meteor/ folder at the root of your project, add **meteor.d.ts** ([https://github.com/meteor-typescript/meteor-typescript-libs](https://github.com/meteor-typescript/meteor-typescript-libs)) or any other ts description files you may be interested in.
+```
+{
+   "files": ["typings/main.d.ts"]
+}
+```
+
+As an alternative, you can use [https://github.com/meteor-typescript/meteor-typescript-libs](https://github.com/meteor-typescript/meteor-typescript-libs) package that contains multiple typigns useful in a Meteor project.
 
 ## Credits
 
 * This package is based on [ts-compilers](https://github.com/barbatus/ts-compilers) TypeScript compilers package.
 
 ## Updates
+* **Feb 10 20016** - TypeScript Compilee updated to the latest version, which uses `tsconfig.json` instead `.tsconfig`.
+`tsconfig.json` is now being watched as any other `ts`-file, which means, in case of any changes, your project will be recompiled with the new config.
 * **Nov 1st 2015** - Compiler module changed to support Meteor 1.2.x
 * **Jul 8 2015** - fixed an issue on Windows where zzz.ts-compiler.ts would try and make itself on the C:\ drive if your project was located in My Documents. - Jacob Foster
 * **Jul 8 2015** - fixed an issue where tsc could not be found on Windows (must install TypeScript for Visual Studio) - Jacob Foster
