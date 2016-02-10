@@ -9,7 +9,7 @@ With this meteor plugin, TypeScript files (ending is .ts) are automatically comp
 ## What's included?
 
 * Transparent compilation of Typescript assets on the Meteor platform.
-* Libraries such as **meteor.d.ts** or **node.d.ts** are not bundled with the project (ie. ), please grab them from [https://github.com/meteor-typescript/meteor-typescript-libs](https://github.com/meteor-typescript/meteor-typescript-libs).
+* Libraries such as **meteor.d.ts** or **node.d.ts** are not bundled with the project (ie. ), please grab them from [https://github.com/meteor-typescript/meteor-typescript-libs](https://github.com/meteor-typescript/meteor-typescript-libs) or install them with help of special tools (see below).
 * Sample demos built around Meteor+TypeScript can be found in the **samples** folder.
 
 ## Install
@@ -17,23 +17,23 @@ With this meteor plugin, TypeScript files (ending is .ts) are automatically comp
 This version of the module supports Meteor 1.2.x and forward.
 
 * From your Meteor project, type `meteor add meteortypescript:compiler`.
-* Add a `.tsconfig` at the top of your project (see below).
-* Create a /typings/meteor/ folder at the root of your project, add **meteor.d.ts** ([https://github.com/meteor-typescript/meteor-typescript-libs](https://github.com/meteor-typescript/meteor-typescript-libs)) or any other ts description files you may be interested in.
+* Add a `tsconfig.json` at the top of your project (see below).
+* That's it! From now on, all `*.ts` files are dynamically compiled into Javascript (client and server).
 
-That's it! From now on, all `*.ts` files are dynamically compiled into Javascript (client and server).
-
-* Refer to the following [coding guidelines](https://github.com/meteor-typescript/meteor-typescript-libs#usage-collections) for more details about how to use Meteor and Typescript together.
-* When working with an IDE such as WebStorm, be sure to disable typescript generation.
+To learn more:
+* Refer to the following [coding guidelines](https://github.com/meteor-typescript/meteor-typescript-libs#usage-collections) for more details about how to use Meteor and TypeScript together.
+* If you use IDEs like WebStorm, you may be interested to read a [chapter](http://www.angular-meteor.com/tutorials/socially/angular2/folder-structure) from the Angular2-Meteor tutorial about using TypeScript in Meteor projects including integration with IDEs.
 
 ## tsconfig.json
 
-Almost all options are supported from the [original list]((https://github.com/Microsoft/TypeScript/wiki/Compiler-Options)), except some exceptions.
+Except few ones, almost all options are supported from the [original list](https://github.com/Microsoft/TypeScript/wiki/Compiler-Options).
+Read up about exceptions [here](https://github.com/barbatus/typescript#compiler-options).
 
-For instance, a valid `tsconfig.json` looks like:
+For instance, a valid `tsconfig.json` may look like:
 
 ```json
  {
-    compilerOprions: {
+    "compilerOprions": {
       "target": "es5",
       "sourceMap": true,
       "module": "system",
@@ -42,8 +42,11 @@ For instance, a valid `tsconfig.json` looks like:
  }
  ```
 
-There are some additional options are available for your convenience.
+You may like to make use of some the additional options.
 Check out them [here](https://github.com/barbatus/ts-compilers#typescript-config).
+
+Default TypeScript configuration has `module` set to `system`, which means each file will be compiled to a SystemJS module.
+In order to make it work, add `systemjs:systemjs` package to you app or package or remove SystemJS setting `module` to `none` in the config file.
 
 ## Typings
 
@@ -71,9 +74,25 @@ There are two ways to add typings:
 > Note: `files` section works only for typings, TypeScript files are just ignored
 > since they are passed to the compiler by Meteor anyways.
 
+## Third Party Libraries' Typings
+
+It's recommended to use `typings` tool to search and install typings of third party libraries.
+This tool can search across and install typings from multiple global repos including [DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped).
+
+For example, to install Meteor typings, just hit:
+
+```
+npm install typings -g
+typings install meteor --ambient
+```
+
+As an alternative, you can use [https://github.com/meteor-typescript/meteor-typescript-libs](https://github.com/meteor-typescript/meteor-typescript-libs) package that contains multiple typigns useful in a Meteor project.
+
+* Create a /typings/meteor/ folder at the root of your project, add **meteor.d.ts** ([https://github.com/meteor-typescript/meteor-typescript-libs](https://github.com/meteor-typescript/meteor-typescript-libs)) or any other ts description files you may be interested in.
+
 ## Credits
 
-* This package is based on (`ts-compilers`)[[ts-compilers](https://github.com/barbatus/ts-compilers)] TypeScript compilers package.
+* This package is based on [ts-compilers](https://github.com/barbatus/ts-compilers) TypeScript compilers package.
 
 ## Updates
 * **Nov 1st 2015** - Compiler module changed to support Meteor 1.2.x
