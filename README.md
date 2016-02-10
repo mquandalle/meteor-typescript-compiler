@@ -16,13 +16,13 @@ With this meteor plugin, TypeScript files (ending is .ts) are automatically comp
 
 This version of the module supports Meteor 1.2.x and forward.
 
-* From your Meteor project, type `meteor add meteortypescript:compiler`.
-* Add a `tsconfig.json` at the top of your project (see below).
-* That's it! From now on, all `*.ts` files are dynamically compiled into Javascript (client and server).
+* From your Meteor project, type `meteor add meteortypescript:compiler`
+* Add a `tsconfig.json` at the top of your project (see below)
+* That's it! From now on, all `*.ts` files are dynamically compiled into Javascript (client and server)
 
 To learn more:
-* Refer to the following [coding guidelines](https://github.com/meteor-typescript/meteor-typescript-libs#usage-collections) for more details about how to use Meteor and TypeScript together.
-* If you use IDEs like WebStorm, you may be interested to read a [chapter](http://www.angular-meteor.com/tutorials/socially/angular2/folder-structure) from the Angular2-Meteor tutorial about using TypeScript in Meteor projects including integration with IDEs.
+* Refer to the following [coding guidelines](https://github.com/meteor-typescript/meteor-typescript-libs#usage-collections) for more details about how to use Meteor and TypeScript together
+* If you use IDEs like WebStorm, you may be interested to read a [chapter](http://www.angular-meteor.com/tutorials/socially/angular2/folder-structure) from the Angular2-Meteor tutorial about using TypeScript in Meteor projects including integration with IDEs
 
 ## tsconfig.json
 
@@ -71,7 +71,7 @@ There are two ways to add typings:
   }
 ```
 
-> Note: `files` section works only for typings, TypeScript files are just ignored
+> Note: `files` section works only with typings, TypeScript files are just ignored
 > since they are passed to the compiler by Meteor anyways.
 
 ## Third Party Libraries' Typings
@@ -86,7 +86,7 @@ npm install typings -g
 typings install meteor --ambient
 ```
 
-This will add Meteor definition files linked together in the root definition file called `main.d.ts`:
+This will add Meteor definition files linked together in the root definition file called `main.d.ts`.
 Add `typings/main.d.ts` to your config accordingly:
 
 ```
