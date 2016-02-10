@@ -25,33 +25,55 @@ That's it! From now on, all `*.ts` files are dynamically compiled into Javascrip
 * Refer to the following [coding guidelines](https://github.com/meteor-typescript/meteor-typescript-libs#usage-collections) for more details about how to use Meteor and Typescript together.
 * When working with an IDE such as WebStorm, be sure to disable typescript generation.
 
-## .tsconfig
+## tsconfig.json
 
-With a few exceptions, the options in this file are the same as the tsc command line parameters (https://github.com/Microsoft/TypeScript/wiki/Compiler-Options).
+Almost all options are supported from the [original list]((https://github.com/Microsoft/TypeScript/wiki/Compiler-Options)), except some exceptions.
 
-For instance:
+For instance, a valid `tsconfig.json` looks like:
 
 ```json
  {
-    "target": "es5",
-    "sourceMap": true,
-    "noImplicitAny": true,
-    "jsx": "preserve"
+    compilerOprions: {
+      "target": "es5",
+      "sourceMap": true,
+      "module": "system",
+      "target": "es5"
+    }
  }
  ```
 
-The package extends usage with the following additions:
+There are some additional options are available for your convenience.
+Check out them [here](https://github.com/barbatus/ts-compilers#typescript-config).
 
-* **noResolve**: true | false - When set to true referencedFiles array will be always empty.
-* **alwaysThrow**: true | false - When set, tells the compiler to throw exceptions whenever syntactic or semantic ("module not found", for example) error occurs. The default behavior is to throw on syntactic errors.
-* **useCache**: true | false - When set, enables caching of generated files.
+## Typings
 
-The options which are not considered are declaration, project, watch (file changes watch is expected to done via Meteor plugins), inlineSourceMap, inlineSources, outDir, outFile, rootDir, sourceRoot.
+There are two ways to add typings:
 
+  - to reference a definition file using sugared syntax in any other `ts`-file:
+
+```
+  ///<reference path="typings/foo.d.ts" />
+```
+
+  - or add typings in the `files` section of the config:
+
+```
+  {
+    compilerOptions: {
+      ...
+    },
+    files: {
+      "typings/foo.d.ts"
+    }
+  }
+```
+
+> Note: `files` section works only for typings, TypeScript files are just ignored
+> since they are passed to the compiler by Meteor anyways.
 
 ## Credits
 
-* A TypeScript compiler that used in this package provided by the [ts-compilers](https://github.com/barbatus/ts-compilers).
+* This package is based on (`ts-compilers`)[[ts-compilers](https://github.com/barbatus/ts-compilers)] TypeScript compilers package.
 
 ## Updates
 * **Nov 1st 2015** - Compiler module changed to support Meteor 1.2.x
