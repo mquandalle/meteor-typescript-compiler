@@ -33,7 +33,7 @@ For instance, a valid `tsconfig.json` may look like:
 
 ```json
  {
-    "compilerOprions": {
+    "compilerOptions": {
       "target": "es5",
       "sourceMap": true,
       "module": "commonjs"
